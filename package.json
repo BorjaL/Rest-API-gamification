@@ -1,0 +1,16 @@
+{
+	"name": "rest-api-gamifitacion",
+	"version": "0.0.1",
+	"description": "rest api for the different app of gamification",
+	"dependencies": {
+		"restify": "2.6.0"
+	},
+	"repository": {
+    	"type": "git",
+    	"url": "git://github.com/BorjaL/Rest-API-gamification.git"
+  	},
+	"author": {
+    	"name": "Borja Fernandez",
+    	"email": "borja.fpillado@gmail.com"
+  	}
+}
