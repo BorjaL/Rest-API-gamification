@@ -12,5 +12,5 @@ server.get('/user/:username', function (req, res, next) {
 
 server.post('/user', function (req, res, next) {
 	console.log('Someone wants to create a new user called %s', req.params.username)
-	res.send()
+	res.send(201)
 })
