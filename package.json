@@ -1,0 +1,9 @@
+{
+    "name": "rest-api-gamification",
+    "description": "Rest api for gamification app",
+    "version": "0.0.1",
+    "private": true,
+    "dependencies": {
+    	"restify": "*"
+    }
+}
