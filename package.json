@@ -1,9 +1,14 @@
 {
-    "name": "rest-api-gamification",
-    "description": "Rest api for gamification app",
-    "version": "0.0.1",
+	"name": "rest-api-gamifitacion",
+	"version": "0.0.1",
+	"description": "rest api for the different app of gamification",
     "private": true,
-    "dependencies": {
-    	"restify": "*"
-    }
+	"scripts": {"start": "node rest-api.js"},
+	"dependencies": {
+		"restify": "2.6.0"
+	},
+	"author": {
+    	"name": "Borja Fernandez",
+    	"email": "borja.fpillado@gmail.com"
+  	}
 }
