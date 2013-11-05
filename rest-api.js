@@ -9,22 +9,22 @@ server.listen(3000, function () {
 	console.log('%s listening at %s', server.name, server.url)
 })
 
-server.get('/user/:id', function (req, res, next) {
+server.get('/player/:id', function (req, res, next) {
 	console.log('Someone asks for %s', req.params.id)
 	res.send()
 })
 
-server.post('/user', function (req, res, next) {
-	console.log('Someone wants to create a new user called %s', req.params.username)
+server.post('/player', function (req, res, next) {
+	console.log('Someone wants to create a new player called %s', req.params.username)
 	res.send(201)
 })
 
-server.put('/user/:id', function (req, res, next) {
+server.put('/player/:id', function (req, res, next) {
 	console.log('Someone wants to update to %s', req.params.username)
 	res.send()
 })
 
-server.del('/user/:id', function (req, res, next) {
+server.del('/player/:id', function (req, res, next) {
 	console.log('Someone wants to delete %s', req.params.id)
 	res.send()
 })
