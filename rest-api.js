@@ -1,12 +1,11 @@
 var restify = require('restify')
 var server = restify.createServer({name: 'gami-api'})
-UserRepository = require('./infraestructure/user_repository').UserRepository
+var PlayerService = require('./model/player_service').PlayerService
+var playerService = new PlayerService()
 
 server
   .use(restify.fullResponse())
   .use(restify.bodyParser())
-
-var userRepository = new UserRepository('localhost', 27017);
 
 server.listen(3000, function () {
 	console.log('%s listening at %s', server.name, server.url)
@@ -18,8 +17,11 @@ server.get('/player/:id', function (req, res, next) {
 })
 
 server.post('/player', function (req, res, next) {
-	userRepository.save({username: req.params.username}, function (error, players){
-		res.send(201)
+	playerService.saveAPlayer({username: req.params.username}, function (error, player){
+		if (error)
+			res.send(500)
+		
+		res.send(201, player)
 	})
 })
 
