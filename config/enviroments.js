@@ -4,6 +4,12 @@ var config = {
 		"server": {
 			"url": "dev.gamification.com",
 			"port": 3000
+		},
+
+		"mongodb":{
+			"url": "localhost",
+			"port": 27017,
+			"name": "gamification"
 		}
 	},
 
@@ -11,6 +17,12 @@ var config = {
 		"server": {
 			"url": "dev.gamification.com",
 			"port": 3001
+		},
+
+		"mongodb":{
+			"url": "localhost",
+			"port": 27017,
+			"name": "gamification_test"
 		}
 	},
 
@@ -18,6 +30,12 @@ var config = {
 		"server": {
 			"url": "",
 			"port": 3002
+		},
+
+		"mongodb":{
+			"url": "",
+			"port": 27017,
+			"name": "gamification"
 		}
 	}
 }

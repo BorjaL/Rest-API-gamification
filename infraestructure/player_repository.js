@@ -1,9 +1,10 @@
 var Db = require('mongodb').Db
 var Connection = require('mongodb').Connection
 var Server = require('mongodb').Server
+var config = require('../config/enviroments').setUp()
 
 PlayerRepository = function(host, port) {
-	this.db = new Db('gamification', new Server("localhost", 27017, {safe: true}, {auto_reconnect: true}, {}))
+	this.db = new Db(config.mongodb.name, new Server(config.mongodb.url, config.mongodb.port, {safe: true}, {auto_reconnect: true}, {}))
 	this.db.open(function(){})
 }
 
