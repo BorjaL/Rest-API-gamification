@@ -10,4 +10,4 @@ server.listen(config.server.port, config.server.url,function () {
 	console.log('%s listening at %s', server.name, server.url)
 })
 
-module.exports = server
+exports = module.exports = server
