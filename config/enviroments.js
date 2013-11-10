@@ -2,19 +2,22 @@ var config = {
 	
 	"development": {
 		"server": {
+			"url": "dev.gamification.com",
 			"port": 3000
 		}
 	},
 
 	"test": {
 		"server": {
+			"url": "dev.gamification.com",
 			"port": 3001
 		}
 	},
 
 	"production": {
 		"server": {
-			"port" : 3002
+			"url": "",
+			"port": 3002
 		}
 	}
 }
