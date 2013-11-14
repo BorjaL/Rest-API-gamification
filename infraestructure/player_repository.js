@@ -1,30 +1,27 @@
 var Db = require('mongodb').Db
 var Connection = require('mongodb').Connection
-var Server = require('mongodb').Server
+var mongodb = require('mongodb')
 var config = require('../config/enviroments').setUp()
 
-PlayerRepository = function(host, port) {
-	this.db = new Db(config.mongodb.name, new Server(config.mongodb.url, config.mongodb.port, {safe: true}, {auto_reconnect: true}, {}))
-	this.db.open(function(){})
-}
+PlayerRepository = function() {}
 
 PlayerRepository.prototype.getCollection = function(callback) {
-	this.db.collection('players', function(error, players_collection) {
-		if( error ) callback(error)
+	this.db = new Db(config.mongodb.name, new mongodb.Server(config.mongodb.url, config.mongodb.port, {auto_reconnect: true}, {}), {safe: true})
+	this.db.open(function(error, client){
+		if (error) callback(error)
 
-		callback(null, players_collection)
+		var collection = new mongodb.Collection(client, 'players')
+		callback(null, collection)
 	})
 }
 
 PlayerRepository.prototype.save = function(player, callback) {
-    this.getCollection(function(error, players_collection) {
-    	if ( error ) callback(error)
-
-    	players_collection.insert(player, function(error) {
-    		if ( error ) callback(error)
-    			
-    		callback(null, player)
-    	})
+	
+	this.getCollection(function(error, collection){
+		collection.insert(player, function(error) {
+			if ( error ) callback(error)
+			callback(null, player)
+		})
 	})
 }
 
