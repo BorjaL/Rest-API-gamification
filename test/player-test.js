@@ -8,14 +8,14 @@ var http = require('restify').createJsonClient({
 
 process.env.NODE_ENV = 'test'
 
-describe('Player', function(){
+describe('Player server side', function(){
 	before(function(done){
 		var server = require ('../infraestructure/server')
 		server.startServer()
 		done()
 	})
 	describe('create', function(){
-		it('should call to the service', function(done){
+		it('should call to the method saveAPlayer in the player service', function(done){
 			var player_data = {
 				username: 'blancuch'
 			}
