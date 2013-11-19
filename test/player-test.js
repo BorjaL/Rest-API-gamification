@@ -32,17 +32,17 @@ describe('Player server side', function(){
 		})
 	})
 	describe('update', function(){
-		it('should save player blancuch with new name borjal in database', function(done){
-			var player_data = {
-				username: 'blancuch'
-			}
+		it('should call to the method findAPlayer in the player service', function(done){
+			var spy = sinon.stub(PlayerService.prototype, 'findAPlayer', function(error, player){
+				res.send(200, player)
+			})
 			
-
-			
-
+			http.get('/player/blancuch', function(err, req, res, data) {
+				
+				sinon.assert.calledOnce(spy);
 				done()
-				
-				
+
+			})		
 		})
 	})
 })

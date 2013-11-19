@@ -25,4 +25,14 @@ PlayerRepository.prototype.save = function(player, callback) {
 	})
 }
 
+PlayerRepository.prototype.find = function(player, callback) {
+	
+	this.getCollection(function(error, collection){
+		collection.find(player, function(error) {
+			if ( error ) callback(error)
+			callback(null, player)
+		})
+	})
+}
+
 exports.PlayerRepository = PlayerRepository

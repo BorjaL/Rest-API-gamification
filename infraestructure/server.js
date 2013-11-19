@@ -23,8 +23,8 @@ exports.startServer = function(){
 		})
 	})
 
-	server.put('/player/:id', function (req, res, next) {
-		playerService.updateAPlayer({id: req.params.id, username: req.params.username}, function (error, player){
+	server.get('/player/:username', function (req, res, next) {
+		playerService.findAPlayer({username: req.params.username}, function (error, player){
 			if (error){
 				res.send(error);
 			}
