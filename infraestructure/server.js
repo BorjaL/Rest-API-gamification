@@ -16,7 +16,17 @@ exports.startServer = function(){
 	server.post('/player', function (req, res, next) {
 		playerService.saveAPlayer({username: req.params.username}, function (error, player){
 			if (error){
-				res.send(500)
+				res.send(error)
+			}
+			
+			res.send(201, player)
+		})
+	})
+
+	server.put('/player/:id', function (req, res, next) {
+		playerService.updateAPlayer({id: req.params.id, username: req.params.username}, function (error, player){
+			if (error){
+				res.send(error);
 			}
 			
 			res.send(201, player)
