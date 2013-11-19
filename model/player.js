@@ -1,13 +1,13 @@
-Player = function(data){
+function Player(data){
 	this.username = data.username
 	this.created_at = new Date()
-}
 
-Player.prototype.toJson = function(){
-	return  {
+	this.toJson = function(){
+		return  {
 				username: 	this.username,
 				created_at: this.created_at
 			}
+	}
 }
 
 exports.Player = Player
