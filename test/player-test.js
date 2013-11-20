@@ -20,26 +20,23 @@ describe('Player server side', function(){
 				username: 'blancuch'
 			}
 
-			var spy = sinon.stub(PlayerService.prototype, 'saveAPlayer', function(error, player){
-				res.send(201, player)
-			})
+			var spy = sinon.spy(PlayerService.prototype, "saveAPlayer")
+			
 			http.post('/player', player_data, function(err, req, res, data) {
 				
-				sinon.assert.calledOnce(spy);
+				sinon.assert.calledOnce(spy)
 				done()
 
 			})
 		})
 	})
-	describe('update', function(){
+	describe('find', function(){
 		it('should call to the method findAPlayer in the player service', function(done){
-			var spy = sinon.stub(PlayerService.prototype, 'findAPlayer', function(error, player){
-				res.send(200, player)
-			})
+			var spy = sinon.spy(PlayerService.prototype, 'findAPlayer')
 			
 			http.get('/player/blancuch', function(err, req, res, data) {
 				
-				sinon.assert.calledOnce(spy);
+				sinon.assert.calledOnce(spy)
 				done()
 
 			})		
