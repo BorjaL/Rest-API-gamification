@@ -2,17 +2,17 @@ PlayerRepository = require('../infraestructure/player_repository').PlayerReposit
 Player = require('./player').Player
 
 function PlayerService(){
-	var playerRepository = new PlayerRepository()
-}
+	this.playerRepository = new PlayerRepository()
 
-PlayerService.prototype.saveAPlayer = function(player_data, callback){
-	var player = new Player(player_data)
+	this.saveAPlayer = function(player_data, callback){
+		var player = new Player(player_data)
 
-	this.playerRepository.save(player.toJson(), function (error, player_saved){
-		if ( error ) callback(error)
+		this.playerRepository.save(player.toJson(), function (error, player_saved){
+			if ( error ) callback(error)
 
-		callback(null, player_saved)
-	})
+			callback(null, player_saved)
+		})
+	}
 }
 
 PlayerService.prototype.findAPlayer = function (player_data, callback){
