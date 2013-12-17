@@ -7,7 +7,6 @@ PlayerRepository = function() {
 
 PlayerRepository.prototype.save = function(player, callback) {
 	this.db.players.save(player, function(error, result) {
-		console.log(error)
 		if ( error ) callback(error)
 		callback(null, result)
 	})
