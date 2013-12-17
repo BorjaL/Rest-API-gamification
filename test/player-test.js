@@ -1,45 +1,28 @@
 var sinon = require('sinon'),
 	PlayerService = require('../model/player_service').PlayerService
 
-var http = require('restify').createJsonClient({
-    version: '*',
-    url: 'http://dev.gamification.com:3001'
-});
+var http
 
 process.env.NODE_ENV = 'test'
 
-describe('Player server side', function(){
-	before(function(done){
-		var server = require ('../infraestructure/server')
-		server.startServer()
+describe('Player Service', function(){
+
+	var playerService = new PlayerService()
+	beforeEach(function(done){
+		playerService.playerRepository.clean()
 		done()
 	})
-	describe('create', function(){
-		it('should call to the method saveAPlayer in the player service', function(done){
+	describe('save a player', function(){
+		it('should save the player data in mongo', function(done){
 			var player_data = {
 				username: 'blancuch'
 			}
 
-			var spy = sinon.spy(PlayerService.prototype, "saveAPlayer")
-			
-			http.post('/player', player_data, function(err, req, res, data) {
-				
-				sinon.assert.calledOnce(spy)
-				done()
+			playerService.saveAPlayer(player_data, function(error, player_saved){
+				if (error) console.log(error)
+				if(player_saved.username == 'blancuch') done()
 
 			})
-		})
-	})
-	describe('find', function(){
-		it('should call to the method findAPlayer in the player service', function(done){
-			var spy = sinon.spy(PlayerService.prototype, 'findAPlayer')
-			
-			http.get('/player/blancuch', function(err, req, res, data) {
-				
-				sinon.assert.calledOnce(spy)
-				done()
-
-			})		
 		})
 	})
 })
