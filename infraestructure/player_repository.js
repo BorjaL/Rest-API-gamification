@@ -1,38 +1,21 @@
-var Db = require('mongodb').Db
-var Connection = require('mongodb').Connection
-var mongodb = require('mongodb')
-var config = require('../config/enviroments').setUp()
+var mongojs = require('mongojs')
 
-PlayerRepository = function() {}
-
-PlayerRepository.prototype.getCollection = function(callback) {
-	this.db = new Db(config.mongodb.name, new mongodb.Server(config.mongodb.url, config.mongodb.port, {auto_reconnect: true}, {}), {safe: true})
-	this.db.open(function(error, client){
-		if (error) callback(error)
-
-		var collection = new mongodb.Collection(client, 'players')
-		callback(null, collection)
-	})
+PlayerRepository = function() {
+	var config = require('../config/enviroments').setUp()
+	this.db = mongojs(config.mongodb.url+":"+config.mongodb.port+"/"+config.mongodb.name, ['players'])
 }
 
 PlayerRepository.prototype.save = function(player, callback) {
-	
-	this.getCollection(function(error, collection){
-		collection.insert(player, function(error) {
-			if ( error ) callback(error)
-			callback(null, player)
-		})
+	this.db.players.save(player, function(error, result) {
+		console.log(error)
+		if ( error ) callback(error)
+		callback(null, result)
 	})
 }
 
-PlayerRepository.prototype.find = function(player, callback) {
+PlayerRepository.prototype.clean = function() {
 	
-	this.getCollection(function(error, collection){
-		collection.find(player, function(error) {
-			if ( error ) callback(error)
-			callback(null, player)
-		})
-	})
+	this.db.players.drop(function(error, replay) {})
 }
 
 exports.PlayerRepository = PlayerRepository
