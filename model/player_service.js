@@ -13,17 +13,15 @@ function PlayerService(){
 			callback(null, player_saved)
 		})
 	}
-}
 
-PlayerService.prototype.findAPlayer = function (player_data, callback){
+	this.findAPlayer = function(player_username, callback){
+		this.playerRepository.find(player_username, function (error, player_found){
+			if ( error ) callback(error)
 
-	var player = new Player(player_data)
+			callback(null, player_found)
+		})
 
-	this.playerRepository.find(player.toJson(), function (error, player_saved){
-		if ( error ) callback(error)
-
-		callback(null, player_saved)
-	})
+	}
 }
 
 exports.PlayerService = PlayerService
