@@ -7,7 +7,7 @@ function PlayerService(){
 	this.saveAPlayer = function(player_data, callback){
 		var player = new Player(player_data)
 
-		this.playerRepository.save(player.toJson(), function (error, player_saved){
+		player.save(function (error, player_saved){
 			if ( error ) callback(error)
 
 			callback(null, player_saved)
