@@ -3,7 +3,7 @@ exports.startServer = function(){
 	var server = restify.createServer({name: 'gami-api'})
 	var config = require('../config/enviroments').setUp()
 	var PlayerService = require('../model/player_service').PlayerService
-	var playerService = new PlayerService()
+	var player_service = new PlayerService()
 
 	server
 	  .use(restify.fullResponse())
@@ -14,7 +14,7 @@ exports.startServer = function(){
 	})
 
 	server.post('/player', function (req, res, next) {
-		playerService.saveAPlayer({username: req.params.username}, function (error, player){
+		player_service.saveAPlayer({username: req.params.username}, function (error, player){
 			if (error){
 				res.send(error)
 			}
@@ -24,7 +24,7 @@ exports.startServer = function(){
 	})
 
 	server.get('/player/:username', function (req, res, next) {
-		playerService.findAPlayer({username: req.params.username}, function (error, player){
+		player_service.findAPlayer({username: req.params.username}, function (error, player){
 			if (error){
 				res.send(error);
 			}
