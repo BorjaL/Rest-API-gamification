@@ -1,4 +1,4 @@
-var PlayerService = require('../model/player_service').PlayerService
+var PlayerService = require('../model/player/player_service').PlayerService
 
 process.env.NODE_ENV = 'test'
 
@@ -62,7 +62,6 @@ describe('Player Service', function(){
 			playerService.saveAPlayer(player_data, function(error, player_saved){
 				playerService.saveAPlayer(player_data, function(error, player_saved){
 					if (error){
-						console.log(error)
 						done()
 					} 
 				})

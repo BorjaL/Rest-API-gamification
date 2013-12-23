@@ -1,4 +1,4 @@
-PlayerRepository = require('../infraestructure/player_repository').PlayerRepository
+PlayerRepository = require('../../infraestructure/player_repository').PlayerRepository
 Player = require('./player').Player
 
 function PlayerService(){

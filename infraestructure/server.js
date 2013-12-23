@@ -2,7 +2,7 @@ exports.startServer = function(){
 	var restify = require('restify')
 	var server = restify.createServer({name: 'gami-api'})
 	var config = require('../config/enviroments').setUp()
-	var PlayerService = require('../model/player_service').PlayerService
+	var PlayerService = require('../model/player/player_service').PlayerService
 	var player_service = new PlayerService()
 
 	server
