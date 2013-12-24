@@ -7,12 +7,12 @@ describe('Player Service', function(){
 	var playerService = new PlayerService()
 
 	beforeEach(function(done){
-		playerService.playerRepository.clean()
+		playerService.playerRepository.cleanPlayers()
 		done()
 	})
 
 	after(function(done){
-		playerService.playerRepository.clean()
+		playerService.playerRepository.cleanPlayers()
 		done()
 	})
 
@@ -61,7 +61,7 @@ describe('Player Service', function(){
 
 			playerService.saveAPlayer(player_data, function(error, player_saved){
 				playerService.saveAPlayer(player_data, function(error, player_saved){
-					if (error){
+					if (error instanceof DuplicateUsernameError){
 						done()
 					} 
 				})

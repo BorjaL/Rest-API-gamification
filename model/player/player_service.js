@@ -1,4 +1,4 @@
-PlayerRepository = require('../../infraestructure/player_repository').PlayerRepository
+PlayerRepository = require('../../infraestructure/repository').Repository
 Player = require('./player').Player
 
 function PlayerService(){
@@ -15,7 +15,7 @@ function PlayerService(){
 	}
 
 	this.findAPlayer = function(player_username, callback){
-		this.playerRepository.find(player_username, function (error, player_found){
+		this.playerRepository.findPlayer(player_username, function (error, player_found){
 			if ( error ) callback(error)
 
 			callback(null, player_found)
