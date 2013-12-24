@@ -29,7 +29,7 @@ exports.startServer = function(){
 				res.send(error);
 			}
 			
-			res.send(201, player)
+			res.send(200, player)
 		})
 	})
 }
