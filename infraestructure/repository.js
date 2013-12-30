@@ -29,8 +29,8 @@ Repository = function() {
 		})
 	}
 
-	this.findGameByNameAndOwner = function(game_data, callback) {
-		this.db.players.findOne(game_data, function(error, result){
+	this.findGameByName = function(game_name, callback) {
+		this.db.games.findOne(game_name, function(error, result){
 			if ( error ) callback(error)
 			callback(null, result)
 		})
