@@ -14,8 +14,8 @@ function GameService(){
 		})
 	}
 
-	this.findAGame = function(game_data, callback){
-		this.gameRepository.findGameByNameAndOwner(game_data, function (error, game_found){
+	this.findAGame = function(game_name, callback){
+		this.gameRepository.findGameByName(game_name, function (error, game_found){
 			if ( error ) callback(error)
 
 			callback(null, game_found)
