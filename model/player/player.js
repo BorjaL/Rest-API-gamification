@@ -8,7 +8,7 @@ function Player(data){
 
 	this.save = function(callback){
 		var player = this
-		this.playerRepository.findPlayer({username: this.username}, function (error, player_found){
+		this.playerRepository.findPlayerByUsername({username: this.username}, function (error, player_found){
 			if ( error ) callback(error)
 			else if (player_found !== null) callback( new DuplicateUsernameError('this username already exists'))
 			else {

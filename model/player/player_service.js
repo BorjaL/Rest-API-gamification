@@ -15,7 +15,7 @@ function PlayerService(){
 	}
 
 	this.findAPlayer = function(player_username, callback){
-		this.playerRepository.findPlayer(player_username, function (error, player_found){
+		this.playerRepository.findPlayerByUsername(player_username, function (error, player_found){
 			if ( error ) callback(error)
 
 			callback(null, player_found)
