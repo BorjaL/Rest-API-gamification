@@ -11,7 +11,7 @@ Repository = function() {
 		})
 	}
 
-	this.findPlayer = function(player_username, callback) {
+	this.findPlayerByUsername = function(player_username, callback) {
 		this.db.players.findOne(player_username, function(error, result){
 			if ( error ) callback(error)
 			callback(null, result)
@@ -20,6 +20,24 @@ Repository = function() {
 
 	this.cleanPlayers = function() {
 		this.db.players.drop(function(error, replay) {})
+	}
+
+	this.saveGame = function(game, callback) {
+		this.db.games.save(game, function(error, result) {
+			if ( error ) callback(error)
+			callback(null, result)
+		})
+	}
+
+	this.findGameByNameAndOwner = function(game_data, callback) {
+		this.db.players.findOne(game_data, function(error, result){
+			if ( error ) callback(error)
+			callback(null, result)
+		})
+	}
+
+	this.cleanGames = function() {
+		this.db.games.drop(function(error, replay) {})
 	}
 }
 
