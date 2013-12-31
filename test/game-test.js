@@ -26,19 +26,6 @@ describe('Game Service', function(){
 				})
 			})
 
-			it('should get the game data in mongo', function(done){
-				var game_data = {
-					name: "I will be iron man",
-					owner: "Tony Stark"
-				}
-				gameService.saveAGame(game_data, function(error, game_saved){
-					gameService.findAGame(game_data, function(error, game_found){
-						if (error) console.log(error)
-						if(game_saved.name == 'I will be iron man' && game_saved.owner == 'Tony Stark') done()
-					})
-				})
-			})
-
 			it('should get an error because the game already exists', function(done){
 				var game_data = {
 					name: "I will be iron man",
@@ -49,6 +36,44 @@ describe('Game Service', function(){
 						if (error instanceof DuplicateGameNameError){
 							done()
 						}
+					})
+				})
+			})
+		})
+
+		describe('find a game', function(){
+			it('should get the game data in mongo', function(done){
+				var game_data = {
+					name: "I will be iron man",
+					owner: "Tony Stark"
+				}
+				gameService.saveAGame(game_data, function(error, game_saved){
+					gameService.findAGame({name: "I will be iron man"}, function(error, game_found){
+						if (error) console.log(error)
+						if(game_saved.name === 'I will be iron man' && game_saved.owner === 'Tony Stark') done()
+					})
+				})
+			})
+		})
+
+		describe('save an action', function(){
+			var action_data = {
+				title: "Work in my iron suit",
+				game: "I will be iron man",
+				points: 10
+			}
+			var game_data = {
+				name: "I will be iron man",
+				owner: "Tony Stark"
+			}
+
+			it('should save an action in a game collection in mongo', function(done){
+				gameService.saveAGame(game_data, function(error, game_saved){
+					gameService.saveAnAction(action_data, function(error, action_saved){
+						gameService.findAGame(game_data, function(error, game_found){
+							if (error) console.log(error)
+							if(game_found.actions[0].title === 'Work in my iron suit' && game_found.actions[0].points === 10) done()
+						})
 					})
 				})
 			})

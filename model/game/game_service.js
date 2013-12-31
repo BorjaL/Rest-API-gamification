@@ -20,7 +20,18 @@ function GameService(){
 
 			callback(null, game_found)
 		})
+	}
 
+	this.saveAnAction = function(action_data, callback){
+		this.gameRepository.findGameByName({name: action_data.game}, function (error, game_found){
+			var game = new Game(game_found)
+			//var action = new Action(action_data)
+			game.addAnAction(action_data, function(error){
+				if (error) callback(error)
+
+				callback(null)
+			})
+		})
 	}
 }
 
