@@ -70,9 +70,30 @@ describe('Game Service', function(){
 			it('should save an action in a game collection in mongo', function(done){
 				gameService.saveAGame(game_data, function(error, game_saved){
 					gameService.saveAnAction(action_data, function(error, action_saved){
-						gameService.findAGame(game_data, function(error, game_found){
+						gameService.findAGame({name: game_data.name}, function(error, game_found){
 							if (error) console.log(error)
 							if(game_found.actions[0].title === 'Work in my iron suit' && game_found.actions[0].points === 10) done()
+						})
+					})
+				})
+			})
+		})
+
+		describe('user interact', function(){
+			it('join a game', function(done){
+				var game_data = {
+					name: "I will be iron man",
+					owner: "Tony Stark"
+				}
+				var info = {
+					player: "Thor",
+					game: "I will be iron man"
+				}
+				gameService.saveAGame(game_data, function(error, game_saved){
+					gameService.joinToTheGame(info, function(error){
+						gameService.findAGame({name: game_data.name}, function(error, game_found){
+							if (error) console.log(error)
+							if(game_found.players.indexOf('Thor') !== -1) done()
 						})
 					})
 				})

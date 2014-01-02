@@ -6,6 +6,7 @@ function Game(data){
 	this.owner = data.owner
 	this.created_at = new Date()
 	this.actions = []
+	this.players = [data.owner]
 	this.gameRepository = new GameRepository()
 
 	this.save = function(callback){
@@ -31,7 +32,15 @@ function Game(data){
 
 			callback(null)
 		})
-		
+	}
+
+	this.addAPlayer = function(user_name, callback){
+		this.players.push(user_name)
+		this.gameRepository.updateGamePlayers({name: this.name}, {players: this.players},function (error){
+			if ( error ) callback(error)
+
+			callback(null)
+		})
 	}
 
 	this.toJson = function(){

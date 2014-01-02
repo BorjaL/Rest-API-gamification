@@ -43,6 +43,13 @@ Repository = function() {
 		})
 	}
 
+	this.updateGamePlayers = function(game_name, game_players, callback){
+		this.db.games.update(game_name, {$set: game_players}, function(error, result){
+			if ( error ) callback(error)
+			callback(null)
+		})
+	}
+
 	this.cleanGames = function() {
 		this.db.games.drop(function(error, replay) {})
 	}
