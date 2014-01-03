@@ -2,7 +2,7 @@ var mongojs = require('mongojs')
 
 Repository = function() {
 	var config = require('../config/enviroments').setUp()
-	this.db = mongojs(config.mongodb.url+":"+config.mongodb.port+"/"+config.mongodb.name, ['players','games'])
+	this.db = mongojs(config.mongodb.url+":"+config.mongodb.port+"/"+config.mongodb.name, ['players','games','actions'])
 
 	this.savePlayer = function(player, callback) {
 		this.db.players.save(player, function(error, result) {
@@ -36,10 +36,17 @@ Repository = function() {
 		})
 	}
 
-	this.updateGameActions = function(game_name, game_actions, callback){
-		this.db.games.update(game_name, {$set: game_actions}, function(error, result){
+	this.findGameById = function(game_id, callback) {
+		this.db.games.findOne(game_id, function(error, result){
 			if ( error ) callback(error)
-			callback(null)
+			callback(null, result)
+		})
+	}
+
+	this.findAllActionsOfAGame = function(game_id, callback) {
+		this.db.actions.find(game_id, function(error, result){
+			if ( error ) callback(error)
+			callback(null, result)
 		})
 	}
 
@@ -50,8 +57,19 @@ Repository = function() {
 		})
 	}
 
+	this.saveNewGameAction = function(action_data, callback){
+		this.db.actions.save(action_data, function(error, result) {
+			if ( error ) callback(error)
+			callback(null, result)
+		})
+	}
+
 	this.cleanGames = function() {
 		this.db.games.drop(function(error, replay) {})
+	}
+
+	this.cleanActions = function() {
+		this.db.actions.drop(function(error, replay) {})
 	}
 }
 

@@ -8,6 +8,7 @@ describe('Game Service', function(){
 
 		beforeEach(function(done){
 			gameService.gameRepository.cleanGames()
+			gameService.gameRepository.cleanActions()
 			done()
 		})
 
@@ -57,22 +58,23 @@ describe('Game Service', function(){
 		})
 
 		describe('save an action', function(){
-			var action_data = {
-				title: "Work in my iron suit",
-				game: "I will be iron man",
-				points: 10
-			}
-			var game_data = {
-				name: "I will be iron man",
-				owner: "Tony Stark"
-			}
-
 			it('should save an action in a game collection in mongo', function(done){
+
+				var game_data = {
+					name: "I will be iron man",
+					owner: "Tony Stark"
+				}
 				gameService.saveAGame(game_data, function(error, game_saved){
+					var action_data = {
+						title: "Work in my iron suit",
+						game: game_saved._id,
+						points: 10
+					}
 					gameService.saveAnAction(action_data, function(error, action_saved){
-						gameService.findAGame({name: game_data.name}, function(error, game_found){
+						gameService.findAllActionsOfAGame({game: game_saved._id}, function(error, actions_found){
 							if (error) console.log(error)
-							if(game_found.actions[0].title === 'Work in my iron suit' && game_found.actions[0].points === 10) done()
+							if (actions_found[0].title === 'Work in my iron suit')
+								done()
 						})
 					})
 				})
@@ -97,6 +99,10 @@ describe('Game Service', function(){
 						})
 					})
 				})
+			})
+
+			it('do an action', function(done){
+				done()
 			})
 		})
 })

@@ -2,6 +2,7 @@ GameRepository = require('../../infraestructure/repository').Repository
 DuplicateGameNameError = require('../error/duplicate_game_name_error').DuplicateGameNameError
 
 function Game(data){
+	this._id = data._id
 	this.name = data.name
 	this.owner = data.owner
 	this.created_at = new Date()
@@ -26,11 +27,10 @@ function Game(data){
 	}
 
 	this.addAnAction = function(action_data, callback){
-		this.actions.push(action_data)
-		this.gameRepository.updateGameActions({name: this.name}, {actions: this.actions},function (error){
+		this.gameRepository.saveNewGameAction(action_data, function (error, action_saved){
 			if ( error ) callback(error)
 
-			callback(null)
+			callback(null, action_saved)
 		})
 	}
 
@@ -45,6 +45,7 @@ function Game(data){
 
 	this.toJson = function(){
 		return  {
+				_id: this._id, 
 				name: 	this.name,
 				owner: this.owner,
 				actions: this.actions,

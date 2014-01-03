@@ -23,13 +23,21 @@ function GameService(){
 	}
 
 	this.saveAnAction = function(action_data, callback){
-		this.gameRepository.findGameByName({name: action_data.game}, function (error, game_found){
+		this.gameRepository.findGameById({_id: action_data.game}, function (error, game_found){
 			var game = new Game(game_found)
 			game.addAnAction(action_data, function(error){
 				if (error) callback(error)
 
 				callback(null)
 			})
+		})
+	}
+
+	this.findAllActionsOfAGame = function(game_id, callback){
+		this.gameRepository.findAllActionsOfAGame(game_id, function (error, actions_found){
+			if (error) callback(error)
+
+			callback(null, actions_found)
 		})
 	}
 
