@@ -11,11 +11,6 @@ describe('Player Service', function(){
 		done()
 	})
 
-	after(function(done){
-		playerService.playerRepository.cleanPlayers()
-		done()
-	})
-
 	describe('get a player', function(){
 		it('should get the player data in mongo', function(done){
 			var player_data = {

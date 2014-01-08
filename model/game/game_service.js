@@ -42,14 +42,21 @@ function GameService(){
 	}
 
 	this.joinToTheGame = function(userAndGameInfo, callback){
-		this.gameRepository.findGameByName({name: userAndGameInfo.game}, function(error, game_found){
-			var game = new Game(game_found)
-			game.addAPlayer(userAndGameInfo.player, function(error){
-				if (error) callback(error)
+		var service = this
+		service.gameRepository.findPlayerByUsername({username: userAndGameInfo.player}, function(error, player_found){
+			service.gameRepository.findGameByName({name: userAndGameInfo.game}, function(error, game_found){
+				var game = new Game(game_found)
+				var player = new Player(player_found)
+				game.addAPlayer(player._id, function(error){
+					player.joinToAGame(game._id, function(error){
+						if (error) callback(error)
 
-				callback(null)
+						callback(null)
+					})
+				})
 			})
 		})
+		
 	}
 }
 

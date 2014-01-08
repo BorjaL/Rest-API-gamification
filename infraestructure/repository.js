@@ -57,6 +57,13 @@ Repository = function() {
 		})
 	}
 
+	this.updatePlayerGames = function(user_id, player_games, callback){
+		this.db.games.update(user_id, {$set: player_games}, function(error, result){
+			if ( error ) callback(error)
+			callback(null)
+		})
+	}
+
 	this.saveNewGameAction = function(action_data, callback){
 		this.db.actions.save(action_data, function(error, result) {
 			if ( error ) callback(error)

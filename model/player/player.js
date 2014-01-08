@@ -2,8 +2,10 @@ PlayerRepository = require('../../infraestructure/repository').Repository
 DuplicateUsernameError = require('../error/duplicate_username_error').DuplicateUsernameError
 
 function Player(data){
+	this._id = data._id
 	this.username = data.username
 	this.created_at = new Date()
+	this.games = []
 	this.playerRepository = new PlayerRepository()
 
 	this.save = function(callback){
@@ -21,8 +23,18 @@ function Player(data){
 		})
 	}
 
+	this.joinToAGame = function(game_id, callback){
+		this.games.push(game_id)
+		this.playerRepository.updatePlayerGames({_id: this._id}, {games: this.games},function (error){
+			if ( error ) callback(error)
+
+			callback(null)
+		})
+	}
+
 	this.toJson = function(){
 		return  {
+				_id: 		this._id, 
 				username: 	this.username,
 				created_at: this.created_at
 			}

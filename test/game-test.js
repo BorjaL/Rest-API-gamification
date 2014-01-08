@@ -80,29 +80,4 @@ describe('Game Service', function(){
 				})
 			})
 		})
-
-		describe('user interact', function(){
-			it('join a game', function(done){
-				var game_data = {
-					name: "I will be iron man",
-					owner: "Tony Stark"
-				}
-				var info = {
-					player: "Thor",
-					game: "I will be iron man"
-				}
-				gameService.saveAGame(game_data, function(error, game_saved){
-					gameService.joinToTheGame(info, function(error){
-						gameService.findAGame({name: game_data.name}, function(error, game_found){
-							if (error) console.log(error)
-							if(game_found.players.indexOf('Thor') !== -1) done()
-						})
-					})
-				})
-			})
-
-			it('do an action', function(done){
-				done()
-			})
-		})
 })
