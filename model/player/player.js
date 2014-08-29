@@ -32,6 +32,17 @@ function Player(data){
 		})
 	}
 
+	this.completeAnAction = function(game_info, callback){
+		this.playerRepository.saveUserAction({player_id: this._id, 
+							game_id: game_info.game_id,
+							action_id: game_info.action_id},function (error, result){
+			
+			if ( error ) callback(error);
+
+			callback(null, result);
+		})
+	}
+
 	this.toJson = function(){
 		return  {
 				_id: 		this._id, 
