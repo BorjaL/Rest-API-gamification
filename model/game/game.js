@@ -7,6 +7,7 @@ function Game(data){
 	this.owner = data.owner
 	this.created_at = new Date()
 	this.players = []
+	this.actions = {action: data.action, points: data.points}
 	this.gameRepository = new GameRepository()
 
 	this.save = function(callback){

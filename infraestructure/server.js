@@ -36,7 +36,7 @@ exports.startServer = function(){
 	})
 
 	server.post('/game', function (req, res, next) {
-		game_service.saveAGame({name: req.params.name}, function (error, game){
+		game_service.saveAGame(req.params, function (error, game){
 			if (error){
 				res.send(error)
 			}
