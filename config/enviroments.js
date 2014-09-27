@@ -3,7 +3,7 @@ var config = {
 	"development": {
 		"server": {
 			"url": "dev.gamification.com",
-			"port": 3000
+			"port": 3023
 		},
 
 		"mongodb":{
