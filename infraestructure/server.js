@@ -15,6 +15,24 @@ exports.startServer = function(){
 		console.log('%s listening at %s', server.name, server.url)
 	})
 
+
+	server.post('/games.json', function (req, res, next) {
+		console.log("We are in")
+		game_service.saveAGame(req.params, function (error, game){
+			if (error){
+				res.send(error)
+			}
+			
+			res.send(201, game)
+		})
+	})
+
+	server.get('/games/new.json', function (req, res, next) {
+		res.send(200,{attributes: {name:''}})
+	})
+
+	
+
 	server.post('/player', function (req, res, next) {
 		player_service.saveAPlayer({username: req.params.username}, function (error, player){
 			if (error){
@@ -32,16 +50,6 @@ exports.startServer = function(){
 			}
 			
 			res.send(200, player)
-		})
-	})
-
-	server.post('/game', function (req, res, next) {
-		game_service.saveAGame(req.params, function (error, game){
-			if (error){
-				res.send(error)
-			}
-			
-			res.send(201, game)
 		})
 	})
 
