@@ -65,7 +65,6 @@ function Game(data){
 		for (var parameter in game_data){
 			if (parameter.indexOf("action" + i + "_text") > -1){
 				this.actions.push({text:game_data[parameter], points:game_data[parameter.replace("text", "points")]})
-				console.log(this.actions)
 				i++;
 			}	
 		}
