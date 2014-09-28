@@ -7,7 +7,7 @@ function Game(data){
 	this.owner = data.owner
 	this.created_at = new Date()
 	this.players = []
-	this.actions = {action: data.action, points: data.points}
+	this.actions = []
 	this.gameRepository = new GameRepository()
 
 	this.save = function(callback){
@@ -47,10 +47,28 @@ function Game(data){
 		return  {
 				_id: this._id, 
 				name: 	this.name,
-				owner: this.owner,
 				actions: this.actions,
 				created_at: this.created_at
 			}
+	}
+
+	this.defaultAttributes = function (){
+		return  {
+			name: '',
+			action1_text: '',
+			action1_points: ''
+		}
+	}
+
+	this.initializeActions = function (game_data){
+		var i = 1;
+		for (var parameter in game_data){
+			if (parameter.indexOf("action" + i + "_text") > -1){
+				this.actions.push({text:game_data[parameter], points:game_data[parameter.replace("text", "points")]})
+				console.log(this.actions)
+				i++;
+			}	
+		}
 	}
 }
 

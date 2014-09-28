@@ -17,7 +17,6 @@ exports.startServer = function(){
 
 
 	server.post('/games.json', function (req, res, next) {
-		console.log("We are in")
 		game_service.saveAGame(req.params, function (error, game){
 			if (error){
 				res.send(error)
@@ -28,8 +27,14 @@ exports.startServer = function(){
 	})
 
 	server.get('/games/new.json', function (req, res, next) {
-		res.send(200,{attributes: {name:''}})
-	})
+		game_service.form_fields(function (error, form_fields){
+			if (error){
+				res.send(error)
+			}
+
+			res.send(200,{attributes: form_fields});
+		});
+	});
 
 	
 
