@@ -7,7 +7,7 @@ function Game(data){
 	this.owner = data.owner
 	this.created_at = new Date()
 	this.players = []
-	this.actions = []
+	this.actions = data.actions
 	this.gameRepository = new GameRepository()
 
 	this.save = function(callback){
@@ -53,21 +53,10 @@ function Game(data){
 	}
 
 	this.defaultAttributes = function (){
-		return  {
+		return  {game:{
 			name: '',
-			action1_text: '',
-			action1_points: ''
-		}
-	}
-
-	this.initializeActions = function (game_data){
-		var i = 1;
-		for (var parameter in game_data){
-			if (parameter.indexOf("action" + i + "_text") > -1){
-				this.actions.push({text:game_data[parameter], points:game_data[parameter.replace("text", "points")]})
-				i++;
-			}	
-		}
+			actions: [{text:'', points: 1}, {text:'', points: 1}]
+		}}
 	}
 }
 
