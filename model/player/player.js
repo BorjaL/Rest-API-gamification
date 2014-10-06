@@ -1,12 +1,16 @@
 PlayerRepository = require('../../infraestructure/repository').Repository
 DuplicateUsernameError = require('../error/duplicate_username_error').DuplicateUsernameError
+var bcrypt = require('bcrypt-nodejs');
 
 function Player(data){
 	this._id = data._id
 	this.username = data.username
+	this.password = data.password
+	this.email = data.email
 	this.created_at = new Date()
 	this.games = []
 	this.playerRepository = new PlayerRepository()
+	this.token = ''
 
 	this.save = function(callback){
 		var player = this
@@ -14,11 +18,16 @@ function Player(data){
 			if ( error ) callback(error)
 			else if (player_found !== null) callback( new DuplicateUsernameError('this username already exists'))
 			else {
-				player.playerRepository.savePlayer(player.toJson(), function (error, player_saved){
-					if ( error ) callback(error)
+				player.encryptPassword(player.password, function(error, hash){
+					if (error) callback(error)
 
-					callback(null, player_saved)
-				})
+					player.password = hash;
+					player.playerRepository.savePlayer(player.toJson(), function (error, player_saved){
+						if ( error ) callback(error)
+
+						callback(null, player_saved)
+					});
+				});
 			}
 		})
 	}
@@ -45,11 +54,39 @@ function Player(data){
 
 	this.toJson = function(){
 		return  {
-				_id: 		this._id, 
-				username: 	this.username,
+				username: this.username,
+				password: this.password,
+				email: this.email, 
 				created_at: this.created_at
 			}
 	}
+
+	this.defaultAttributes = function(){
+		return  {player:{
+			username: '',
+			password: '',
+			email: ''
+		}}
+	}
+
+	this.encryptPassword = function(password, callback){
+		bcrypt.genSalt(5, function(err, salt) {
+    		if (err) return callback(err);
+
+    		bcrypt.hash(password, salt, null, function(err, hash) {
+      			if (err) return callback(err);
+      			callback(null, hash);
+    		});
+  		});
+	}
+
+	this.verifyPassword = function(password, callback) {
+  		bcrypt.compare(password, this.password, function(err, isMatch) {
+    		if (err) return callback(err);
+    		callback(null, isMatch);
+  	});
+};
+
 }
 
 exports.Player = Player

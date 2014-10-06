@@ -1,11 +1,13 @@
 exports.startServer = function(){
-	var restify = require('restify')
-	var server = restify.createServer({name: 'gami-api'})
-	var config = require('../config/enviroments').setUp()
-	var PlayerService = require('../model/player/player_service').PlayerService
-	var GameService = require('../model/game/game_service').GameService
-	var player_service = new PlayerService()
-	var game_service = new GameService()
+	var restify = require('restify');
+	var server = restify.createServer({name: 'gami-api'});
+	var passport = require('passport');
+	var config = require('../config/enviroments').setUp();
+	var PlayerService = require('../model/player/player_service').PlayerService;
+	var GameService = require('../model/game/game_service').GameService;
+
+	var player_service = new PlayerService();
+	var game_service = new GameService();
 
 	server
 	  .use(restify.fullResponse())
@@ -23,8 +25,8 @@ exports.startServer = function(){
 			}
 			
 			res.send(201, game)
-		})
-	})
+		});
+	});
 
 	server.get('/games/new.json', function (req, res, next) {
 		game_service.form_fields(function (error, form_fields){
@@ -36,17 +38,25 @@ exports.startServer = function(){
 		});
 	});
 
-	
-
-	server.post('/player', function (req, res, next) {
-		player_service.saveAPlayer({username: req.params.username}, function (error, player){
+	server.post('/players.json', function (req, res, next) {
+		player_service.saveAPlayer(req.params, function (error, player){
 			if (error){
 				res.send(error)
 			}
 			
 			res.send(201, player)
-		})
-	})
+		});
+	});
+
+	server.get('/players/new.json', function (req, res, next) {
+		player_service.form_fields(function (error, form_fields){
+			if (error){
+				res.send(error)
+			}
+
+			res.send(200,{attributes: form_fields});
+		});
+	});
 
 	server.get('/player/:username', function (req, res, next) {
 		player_service.findAPlayer({username: req.params.username}, function (error, player){

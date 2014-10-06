@@ -4,6 +4,12 @@ Player = require('./player').Player
 function PlayerService(){
 	this.playerRepository = new PlayerRepository()
 
+	this.form_fields = function(callback){
+		var player = new Player({})
+
+		callback(null, player.defaultAttributes())
+	}
+
 	this.saveAPlayer = function(player_data, callback){
 		var player = new Player(player_data)
 

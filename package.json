@@ -1,20 +1,25 @@
 {
-	"name": "rest-api-gamifitacion",
-	"version": "0.0.1",
-	"description": "rest api for the different app of gamification",
-    "private": true,
-	"scripts": {"start": "node rest-api.js",
-				"test": "make test"},
-	"dependencies": {
-		"restify": "2.6.0",
-		"mongojs": "0.9.10"
-	},
-	"devDependencies": {
-		"mocha": "1.14.0",
-		"sinon": "1.7.3"
-	},
-	"author": {
-    	"name": "Borja Fernandez",
-    	"email": "borja.fpillado@gmail.com"
-  	}
+  "name": "rest-api-gamifitacion",
+  "version": "0.0.1",
+  "description": "rest api for the different app of gamification",
+  "private": true,
+  "scripts": {
+    "start": "node rest-api.js",
+    "test": "make test"
+  },
+  "dependencies": {
+    "restify": "2.6.0",
+    "mongojs": "0.9.10",
+    "passport": "0.2.1",
+    "passport-facebook": "1.0.3",
+    "bcrypt-nodejs": "0.0.3"
+  },
+  "devDependencies": {
+    "mocha": "1.14.0",
+    "sinon": "1.7.3"
+  },
+  "author": {
+    "name": "Borja Fernandez",
+    "email": "borja.fpillado@gmail.com"
+  }
 }
