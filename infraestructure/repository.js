@@ -12,7 +12,7 @@ Repository = function() {
 	}
 
 	this.findPlayerByUsername = function(player_username, callback) {
-		this.db.players.findOne(player_username, function(error, result){
+		this.db.players.findOne({username: player_username}, function(error, result){
 			if ( error ) callback(error)
 			callback(null, result)
 		})
