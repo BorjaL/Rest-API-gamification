@@ -58,23 +58,11 @@ exports.startServer = function(){
 		});
 	});
 
-	server.get('/player/:username', function (req, res, next) {
-		player_service.findAPlayer({username: req.params.username}, function (error, player){
-			if (error){
-				res.send(error);
-			}
-			
-			res.send(200, player)
-		})
-	})
-
-	server.get('/game/:name', function (req, res, next) {
-		game_service.findAGame({name: req.params.name}, function (error, game){
-			if (error){
-				res.send(error);
-			}
-			
-			res.send(200, game)
-		})
-	})
+	server.post('/players/login.json', function (req, res, next) {
+		player_service.log_in(req.params, function(error, player){
+			if (error) res.send(error)
+				
+			res.send(200,player.toJson());
+		});
+	});
 }
