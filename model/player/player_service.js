@@ -28,6 +28,23 @@ function PlayerService(){
 		})
 
 	}
+
+	this.log_in = function(params, callback){
+		this.playerRepository.findPlayerByUsername(params.username, function (error, player_found_data){
+			if ( error ) callback(error)
+			if (player_found_data == null) callback({message: "Wrong credentials"})
+
+			var player_found = new Player(player_found_data);
+
+			player_found.verifyPassword(params.password, function(error, isMatch){
+				if (error) callback(error)
+
+				if (isMatch) callback(null, player_found)
+				else callback({message: "Wrong credentials"})
+			});
+			
+		});
+	}
 }
 
 exports.PlayerService = PlayerService
