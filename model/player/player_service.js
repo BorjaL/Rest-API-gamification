@@ -1,5 +1,6 @@
 PlayerRepository = require('../../infraestructure/repository').Repository
 Player = require('./player').Player
+var suid = require('rand-token').suid;
 
 function PlayerService(){
 	this.playerRepository = new PlayerRepository()
@@ -26,7 +27,10 @@ function PlayerService(){
 
 			callback(null, player_found)
 		})
+	}
 
+	this.findAPlayerByToken = function(token, callback){
+		callback(null, {});
 	}
 
 	this.log_in = function(params, callback){

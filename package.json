@@ -11,8 +11,9 @@
     "restify": "2.6.0",
     "mongojs": "0.9.10",
     "passport": "0.2.1",
-    "passport-facebook": "1.0.3",
-    "bcrypt-nodejs": "0.0.3"
+    "bcrypt-nodejs": "0.0.3",
+    "rand-token": "~0.2.1",
+    "passport-http-bearer": "~1.0.1"
   },
   "devDependencies": {
     "mocha": "1.14.0",
