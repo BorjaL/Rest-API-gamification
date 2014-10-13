@@ -3,6 +3,7 @@ exports.startServer = function(){
 	var server = restify.createServer({name: 'gami-api'});
 	var passport = require('passport');
 	BearerStrategy = require('passport-http-bearer').Strategy;
+	LocalStrategy = require('passport-local').Strategy;
 	var config = require('../config/enviroments').setUp();
 	var PlayerService = require('../model/player/player_service').PlayerService;
 	var GameService = require('../model/game/game_service').GameService;
@@ -16,8 +17,7 @@ exports.startServer = function(){
 		.use(restify.queryParser())
 		.use(restify.bodyParser());
 
-	passport.use(new BearerStrategy({realm: "players"},
-	  function(token, done) {
+	passport.use(new BearerStrategy({realm: 'players'},function(token, done) {
 
 	    player_service.findAPlayerByToken(token, function(err, user) {
 	        if (err) { return done(err); }
@@ -27,9 +27,15 @@ exports.startServer = function(){
 	  }
 	));
 
+	passport.use(new LocalStrategy({realm: 'players'},function(username, password, done) {
 
-	
-
+	    player_service.logIn(username, password, function(err, user) {
+	        if (err) { return done(err); }
+	        if (!user) { return done(null, false, "Wrong credentials"); }
+	        return done(null, user);
+	      });
+	  }
+	));
 
 	server.post('/games.json', function (req, res, next) {
 		game_service.saveAGame(req.params, function (error, game){
@@ -75,11 +81,15 @@ exports.startServer = function(){
 	});
 
 	server.post('/players/login.json', function (req, res, next) {
-		player_service.log_in(req.params, function(error, player){
-			if (error) res.send(error)
-				
-			res.send(200,player.toJson());
-		});
+		passport.authenticate('local', function(error, player, info) {
+			if (error) {
+		      res.send(error)
+		    }
+		    if (! player) {
+		      return res.send(200, { success : false, message: info });
+		    }
+		    return res.send(200, { success : true, player: player});
+		})(req, res, next);
 	});
 
 	server.listen(config.server.port, config.server.url,function () {
