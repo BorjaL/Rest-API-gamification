@@ -2,7 +2,7 @@ var mongojs = require('mongojs')
 
 Repository = function() {
 	var config = require('../config/enviroments').setUp()
-	this.db = mongojs(config.mongodb.url+":"+config.mongodb.port+"/"+config.mongodb.name, ['players','games','actions', 'activity'])
+	this.db = mongojs(config.mongodb.url+":"+config.mongodb.port+"/"+config.mongodb.name, ['players','games','actions', 'activity', 'tokens'])
 
 	this.savePlayer = function(player, callback) {
 		this.db.players.save(player, function(error, result) {
@@ -81,6 +81,27 @@ Repository = function() {
 
 	this.saveUserAction = function(checkin_info, callback) {
 		this.db.activity.save(action_data, function(error, result) {
+			if ( error ) callback(error)
+			callback(null, result)
+		})
+	}
+
+	this.findTokenByPlayer = function(player, callback){
+		this.db.tokens.findOne({player: player}, function(error, result){
+			if ( error ) callback(error)
+			callback(null, result)
+		})
+	}
+
+	this.findToken = function(token, callback){
+		this.db.tokens.findOne({token: token}, function(error, result){
+			if ( error ) callback(error)
+			callback(null, result)
+		})
+	}
+
+	this.saveToken = function(token, callback) {
+		this.db.tokens.save(token, function(error, result) {
 			if ( error ) callback(error)
 			callback(null, result)
 		})

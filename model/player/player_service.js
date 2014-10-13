@@ -1,9 +1,11 @@
 PlayerRepository = require('../../infraestructure/repository').Repository
+var TokenService = require('../token/token_service').TokenService;
 Player = require('./player').Player
-var suid = require('rand-token').suid;
+
 
 function PlayerService(){
-	this.playerRepository = new PlayerRepository()
+	this.playerRepository = new PlayerRepository();
+	this.tokenService = new TokenService();
 
 	this.form_fields = function(callback){
 		var player = new Player({})
@@ -30,10 +32,19 @@ function PlayerService(){
 	}
 
 	this.findAPlayerByToken = function(token, callback){
-		callback(null, {});
+		var service = this;
+		this.tokenService.findAToken(token, function (error, token_found){
+			service.playerRepository.findPlayerByUsername(token_found.player, function (error, player_found){
+				if ( error ) callback(error);
+				else if (player_found) callback(null, player_found.token);
+				else callback(null, false)
+				
+			})
+		})
 	}
 
 	this.logIn = function(username, password, callback){
+		var service = this;
 		this.playerRepository.findPlayerByUsername(username, function (error, player_found_data){
 			if ( error ) callback(error)
 			if (player_found_data == null) callback(false)
@@ -43,7 +54,12 @@ function PlayerService(){
 			player_found.verifyPassword(password, function(error, isMatch){
 				if (error) callback(error)
 
-				if (isMatch) callback(null, player_found.toJson())
+				if (isMatch){
+					service.tokenService.createToken({player: player_found.username}, function(error, token_saved){
+						callback(null, player_found.toJson())
+					})
+					
+				} 
 				else callback(null, false)
 			});
 			
