@@ -5,8 +5,10 @@ exports.startServer = function(){
 	BearerStrategy = require('passport-http-bearer').Strategy;
 	LocalStrategy = require('passport-local').Strategy;
 	var config = require('../config/enviroments').setUp();
-	var PlayerService = require('../model/player/player_service').PlayerService;
-	var GameService = require('../model/game/game_service').GameService;
+	PlayerService = require('../model/player/player_service').PlayerService;
+	GameService = require('../model/game/game_service').GameService;
+	var redis = require('./redis'); 
+
 
 	var player_service = new PlayerService();
 	var game_service = new GameService();
@@ -17,22 +19,22 @@ exports.startServer = function(){
 		.use(restify.queryParser())
 		.use(restify.bodyParser());
 
-	passport.use(new BearerStrategy({realm: 'players'},function(token, done) {
-
-	    player_service.findAPlayerByToken(token, function(err, user) {
+	passport.use(new BearerStrategy(function(token, done) {
+		redis.get(token, function(err, player_name) {
 	        if (err) { return done(err); }
-	        if (!user) { return done(null, false); }
-	        return done(null, user);
-	      });
-	  }
-	));
+	        if (!player_name) { return done(null, false); }
+	        return done(null, token);
+	     });
+	 }));
 
-	passport.use(new LocalStrategy({realm: 'players'},function(username, password, done) {
+	passport.use(new LocalStrategy(function(username, password, done) {
 
-	    player_service.logIn(username, password, function(err, user) {
+	    player_service.logIn(username, password, function(err, username) {
 	        if (err) { return done(err); }
-	        if (!user) { return done(null, false, "Wrong credentials"); }
-	        return done(null, user);
+	        if (!username) { 
+	        	return done(null, false, "Wrong credentials"); 
+	        }
+	        return done(null, redis.set(username));
 	      });
 	  }
 	));
@@ -56,7 +58,7 @@ exports.startServer = function(){
 					res.send(error)
 				}
 
-				res.send(200,{attributes: form_fields});
+				res.send(200,{attributes: form_fields, access_token: req.user});
 			});
 	});
 
@@ -71,6 +73,7 @@ exports.startServer = function(){
 	});
 
 	server.get('/players/new.json', function (req, res, next) {
+
 		player_service.form_fields(function (error, form_fields){
 			if (error){
 				res.send(error)
@@ -81,7 +84,7 @@ exports.startServer = function(){
 	});
 
 	server.post('/players/login.json', function (req, res, next) {
-		passport.authenticate('local', function(error, player, info) {
+		passport.authenticate('local', { session: false },function(error, player, info) {
 			if (error) {
 		      res.send(error)
 		    }
