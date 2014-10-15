@@ -85,27 +85,6 @@ Repository = function() {
 			callback(null, result)
 		})
 	}
-
-	this.findTokenByPlayer = function(player, callback){
-		this.db.tokens.findOne({player: player}, function(error, result){
-			if ( error ) callback(error)
-			callback(null, result)
-		})
-	}
-
-	this.findToken = function(token, callback){
-		this.db.tokens.findOne({token: token}, function(error, result){
-			if ( error ) callback(error)
-			callback(null, result)
-		})
-	}
-
-	this.saveToken = function(token, callback) {
-		this.db.tokens.save(token, function(error, result) {
-			if ( error ) callback(error)
-			callback(null, result)
-		})
-	}
 }
 
 exports.Repository = Repository
