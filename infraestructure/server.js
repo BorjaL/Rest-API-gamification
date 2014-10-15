@@ -1,43 +1,19 @@
 exports.startServer = function(){
 	var restify = require('restify');
 	var server = restify.createServer({name: 'gami-api'});
-	var passport = require('passport');
-	BearerStrategy = require('passport-http-bearer').Strategy;
-	LocalStrategy = require('passport-local').Strategy;
+	var passport = require('./authentication/passport');
 	var config = require('../config/enviroments').setUp();
 	PlayerService = require('../model/player/player_service').PlayerService;
 	GameService = require('../model/game/game_service').GameService;
-	var redis = require('./redis'); 
 
 
 	var player_service = new PlayerService();
 	var game_service = new GameService();
 
-	
 	server
 		.use(passport.initialize())
 		.use(restify.queryParser())
 		.use(restify.bodyParser());
-
-	passport.use(new BearerStrategy(function(token, done) {
-		redis.get(token, function(err, player_name) {
-	        if (err) { return done(err); }
-	        if (!player_name) { return done(null, false); }
-	        return done(null, token);
-	     });
-	 }));
-
-	passport.use(new LocalStrategy(function(username, password, done) {
-
-	    player_service.logIn(username, password, function(err, username) {
-	        if (err) { return done(err); }
-	        if (!username) { 
-	        	return done(null, false, "Wrong credentials"); 
-	        }
-	        return done(null, redis.set(username));
-	      });
-	  }
-	));
 
 	server.post('/games.json', function (req, res, next) {
 		game_service.saveAGame(req.params, function (error, game){
