@@ -1,4 +1,4 @@
-GameRepository = require('../../infraestructure/repository').Repository
+gameRepository = require('../../infraestructure/repository')
 DuplicateGameNameError = require('../error/duplicate_game_name_error').DuplicateGameNameError
 
 function Game(data){
@@ -8,15 +8,14 @@ function Game(data){
 	this.created_at = new Date()
 	this.players = []
 	this.actions = data.actions
-	this.gameRepository = new GameRepository()
 
 	this.save = function(callback){
 		var game = this
-		this.gameRepository.findGameByName({name: this.name}, function (error, game_found){
+		gameRepository.findGameByName({name: this.name}, function (error, game_found){
 			if ( error ) callback(error)
 			else if (game_found !== null) callback( new DuplicateGameNameError('this game already exists'))
 			else {
-				game.gameRepository.saveGame(game.toJson(), function (error, game_saved){
+				gameRepository.saveGame(game.toJson(), function (error, game_saved){
 					if ( error ) callback(error)
 
 					callback(null, game_saved)
@@ -27,7 +26,7 @@ function Game(data){
 	}
 
 	this.addAnAction = function(action_data, callback){
-		this.gameRepository.saveNewGameAction(action_data, function (error, action_saved){
+		gameRepository.saveNewGameAction(action_data, function (error, action_saved){
 			if ( error ) callback(error)
 
 			callback(null, action_saved)
@@ -36,7 +35,7 @@ function Game(data){
 
 	this.addAPlayer = function(user_name, callback){
 		this.players.push(user_name)
-		this.gameRepository.updateGamePlayers({name: this.name}, {players: this.players},function (error){
+		gameRepository.updateGamePlayers({name: this.name}, {players: this.players},function (error){
 			if ( error ) callback(error)
 
 			callback(null)
