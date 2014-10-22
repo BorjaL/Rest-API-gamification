@@ -3,8 +3,8 @@ exports.startServer = function(){
 	var server = restify.createServer({name: 'gami-api'});
 	var passport = require('./authentication/passport');
 	var config = require('../config/enviroments').setUp();
-	player_service = require('../model/player/player_service');
-	game_service = require('../model/game/game_service').GameService;
+	var player_service = require('../model/player/player_service');
+	var game_service = require('../model/game/game_service');
 
 	server
 		.use(passport.initialize())

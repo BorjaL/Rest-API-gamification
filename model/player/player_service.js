@@ -1,15 +1,15 @@
-player_repository = require('../../infraestructure/repository')
-Player = require('./player').Player
+var player_repository = require('../../infraestructure/repository')
+var player_factory = require('./player_factory')
 
 
 module.exports.form_fields = function(callback){
-	var player = new Player({})
+	var player = player_factory.getPlayerObjectWith({});
 
 	callback(null, player.defaultAttributes())
 }
 
 module.exports.saveAPlayer = function(player_data, callback){
-	var player = new Player(player_data)
+	var player = player_factory.getPlayerObjectWith(player_data);
 
 	player.save(function (error, player_saved){
 		if ( error ) callback(error)
@@ -43,3 +43,6 @@ module.exports.logIn = function(username, password, callback){
 		
 	});
 }
+
+module.exports.player_factory = player_factory;
+module.exports.player_repository = player_repository;
