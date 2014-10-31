@@ -31,7 +31,7 @@ module.exports.logIn = function(username, password, callback){
 		if ( error ) callback(error)
 		if (player_found_data == null) callback(false)
 
-		var player_found = new Player(player_found_data);
+		var player_found = player_factory.getPlayerObjectWith(player_found_data);
 
 		player_found.verifyPassword(password, function(error, isMatch){
 			if (error) callback(error)
