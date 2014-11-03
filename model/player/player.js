@@ -1,4 +1,4 @@
-playerRepository = require('../../infraestructure/repository')
+var player_repository = require('../../infraestructure/repository')
 DuplicateUsernameError = require('../error/duplicate_username_error').DuplicateUsernameError
 var bcrypt = require('bcrypt-nodejs');
 
@@ -10,18 +10,21 @@ function Player(data){
 	this.created_at = new Date()
 	this.games = []
 	this.token = ''
+	this.repository = player_repository
 
 	this.save = function(callback){
 		var player = this
-		playerRepository.findPlayerByUsername(this.username, function (error, player_found){
-			if ( error ) callback(error)
+		this.repository.findPlayerByUsername(this.username, function (error, player_found){
+			
+			if ( error ) callback(error);
 			else if (player_found !== null) callback( new DuplicateUsernameError('this username already exists'))
 			else {
 				player.encryptPassword(player.password, function(error, hash){
-					if (error) callback(error)
+					if (error) callback(error);
 
+					
 					player.password = hash;
-					playerRepository.savePlayer(player.toJson(), function (error, player_saved){
+					player.repository.savePlayer(player.toJson(), function (error, player_saved){
 						if ( error ) callback(error)
 
 						callback(null, player_saved)
@@ -33,7 +36,7 @@ function Player(data){
 
 	this.joinToAGame = function(game_id, callback){
 		this.games.push(game_id)
-		playerRepository.updatePlayerGames({_id: this._id}, {games: this.games},function (error){
+		player_repository.updatePlayerGames({_id: this._id}, {games: this.games},function (error){
 			if ( error ) callback(error)
 
 			callback(null)
@@ -41,7 +44,7 @@ function Player(data){
 	}
 
 	this.completeAnAction = function(game_info, callback){
-		playerRepository.saveUserAction({player_id: this._id, 
+		player_repository.saveUserAction({player_id: this._id, 
 							game_id: game_info.game_id,
 							action_id: game_info.action_id},function (error, result){
 			
