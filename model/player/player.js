@@ -1,4 +1,3 @@
-var player_repository = require('../../infraestructure/repository')
 DuplicateUsernameError = require('../error/duplicate_username_error').DuplicateUsernameError
 var bcrypt = require('bcrypt-nodejs');
 
@@ -10,7 +9,7 @@ function Player(data){
 	this.created_at = new Date()
 	this.games = []
 	this.token = ''
-	this.repository = player_repository
+	this.repository = data.repository
 
 	this.save = function(callback){
 		var player = this

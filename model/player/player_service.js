@@ -3,13 +3,13 @@ var player_factory = require('./player_factory')
 
 
 module.exports.form_fields = function(callback){
-	var player = player_factory.getPlayerObjectWith({});
+	var player = player_factory.getPlayerObjectWith({repository: player_repository});
 
 	callback(null, player.defaultAttributes())
 }
 
 module.exports.saveAPlayer = function(player_data, callback){
-	var player = player_factory.getPlayerObjectWith(player_data);
+	var player = player_factory.getPlayerObjectWith(player_data + {repository: player_repository});
 
 	player.save(function (error, player_saved){
 		if ( error ) callback(error)
@@ -31,7 +31,7 @@ module.exports.logIn = function(username, password, callback){
 		if ( error ) callback(error)
 		if (player_found_data == null) callback(false)
 
-		var player_found = player_factory.getPlayerObjectWith(player_found_data);
+		var player_found = player_factory.getPlayerObjectWith(player_found_data + {repository: player_repository});
 
 		player_found.verifyPassword(password, function(error, isMatch){
 			if (error) callback(error)
