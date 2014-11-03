@@ -1,7 +1,6 @@
 var player_service = require('../model/player/player_service');
 var sinon = require('sinon');
 var assert = require('assert');
-process.env.NODE_ENV = 'test'
 
 describe('Player service', function(){
 
@@ -73,7 +72,7 @@ describe('Player service', function(){
         var getPlayerObjectWithStub = sinon.stub(player_service.player_factory, "getPlayerObjectWith", getPlayerObjectWithFunction);
 
         //and:
-        sinon.stub(player_service.player_repository, "findPlayerByUsername").callsArgWith(1, null, {});
+        var findPlayerByUsernameStub = sinon.stub(player_service.player_repository, "findPlayerByUsername").callsArgWith(1, null, {});
 
         //when:
         player_service.logIn("username", "password",function(arg1, arg2){});
@@ -81,6 +80,7 @@ describe('Player service', function(){
 
         //then:
         assert.equal(verifyPasswordStub.calledOnce, true);
+        findPlayerByUsernameStub.restore();
         done();
 	});
 

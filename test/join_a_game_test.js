@@ -1,7 +1,5 @@
 var gameService = require('../model/game/game_service').GameService
 var playerService = require('../model/player/player_service').PlayerService
-
-process.env.NODE_ENV = 'test'
 /*
 describe('user tries to', function(){
 
