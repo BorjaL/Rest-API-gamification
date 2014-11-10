@@ -11,24 +11,37 @@ function Player(data){
 	this.token = '';
 	this.repository = data.repository;
 
+	this.encryptAndSave = function(password, callback){
+		var player = this;
+		this.encryptPassword(password, function(error, hash){
+			
+			if (error){ 
+				return callback(error); 
+			}
+			
+			player.password = hash;
+			player.repository.savePlayer(player.toJson(), function (error, player_saved){
+				if ( error ){ 
+					return callback(error); 
+				}
+
+				return callback(null, player_saved);
+			});
+		});
+	};
+
 	this.save = function(callback){
 		var player = this;
 		this.repository.findPlayerByUsername(this.username, function (error, player_found){
 			
-			if ( error ){ callback(error); }
-			else if (player_found !== null){ callback( new DuplicateUsernameError('this username already exists')); }
+			if ( error ){ 
+				return callback(error); 
+			}
+			else if (player_found !== null){ 
+				return callback( new DuplicateUsernameError('this username already exists')); 
+			}
 			else {
-				player.encryptPassword(player.password, function(error, hash){
-					if (error){ callback(error); }
-
-					
-					player.password = hash;
-					player.repository.savePlayer(player.toJson(), function (error, player_saved){
-						if ( error ){ callback(error); }
-
-						callback(null, player_saved);
-					});
-				});
+				player.encryptAndSave(player.password, callback);
 			}
 		});
 	};
@@ -36,9 +49,11 @@ function Player(data){
 	this.joinToAGame = function(game_id, callback){
 		this.games.push(game_id);
 		player_repository.updatePlayerGames({_id: this._id}, {games: this.games},function (error){
-			if ( error ){ callback(error); }
+			if ( error ){ 
+				return callback(error); 
+			}
 
-			callback(null);
+			return callback(null);
 		});
 	};
 
@@ -47,9 +62,11 @@ function Player(data){
 							game_id: game_info.game_id,
 							action_id: game_info.action_id},function (error, result){
 			
-			if ( error ){ callback(error); }
+			if ( error ){ 
+				return callback(error); 
+			}
 
-			callback(null, result);
+			return callback(null, result);
 		});
 	};
 
@@ -75,16 +92,22 @@ function Player(data){
     		if ( error ){ callback(error); }
 
     		bcrypt.hash(password, salt, null, function(error, hash) {
-      			if ( error ){ callback(error); }
-      			callback(null, hash);
+      			if ( error ){ 
+      				return callback(error); 
+      			}
+
+      			return callback(null, hash);
     		});
   		});
 	};
 
 	this.verifyPassword = function(password, callback) {
   		bcrypt.compare(password, this.password, function(error, isMatch) {
-    		if ( error ){ callback(error); }
-    		callback(null, isMatch);
+    		if ( error ){ 
+    			return callback(error); 
+    		}
+
+    		return callback(null, isMatch);
   		});
 	};
 
