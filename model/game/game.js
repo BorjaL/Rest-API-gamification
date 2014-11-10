@@ -12,13 +12,19 @@ function Game(data){
 	this.save = function(callback){
 		var game = this;
 		gameRepository.findGameByName({name: this.name}, function (error, game_found){
-			if ( error ){ callback(error); }
-			else if (game_found !== null){ callback( new DuplicateGameNameError('this game already exists')); }
+			if ( error ){ 
+				return callback(error); 
+			}
+			else if (game_found !== null){ 
+				return callback( new DuplicateGameNameError('this game already exists')); 
+			}
 			else {
 				gameRepository.saveGame(game.toJson(), function (error, game_saved){
-					if ( error ){ callback(error); }
+					if ( error ){ 
+						return callback(error); 
+					}
 
-					callback(null, game_saved);
+					return callback(null, game_saved);
 				});
 			}
 		});
@@ -26,18 +32,22 @@ function Game(data){
 
 	this.addAnAction = function(action_data, callback){
 		gameRepository.saveNewGameAction(action_data, function (error, action_saved){
-			if ( error ){ callback(error); }
+			if ( error ){ 
+				return callback(error); 
+			}
 
-			callback(null, action_saved);
+			return callback(null, action_saved);
 		});
 	};
 
 	this.addAPlayer = function(user_name, callback){
 		this.players.push(user_name);
 		gameRepository.updateGamePlayers({name: this.name}, {players: this.players},function (error){
-			if ( error ){ callback(error); }
+			if ( error ){ 
+				return callback(error); 
+			}
 
-			callback(null);
+			return callback(null);
 		});
 	};
 
