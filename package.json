@@ -8,19 +8,22 @@
     "test": "make test"
   },
   "dependencies": {
-    "restify": "2.6.0",
-    "mongojs": "0.9.10",
+    "restify": "~2.6.0",
+    "mongojs": "~0.9.10",
     "passport": "0.2.1",
-    "bcrypt-nodejs": "0.0.3",
+    "bcrypt-nodejs": "~0.0.3",
     "rand-token": "~0.2.1",
     "passport-http-bearer": "~1.0.1",
     "passport-local": "~1.0.0",
     "redis": "~0.12.1"
   },
   "devDependencies": {
-    "mocha": "1.14.0",
-    "sinon": "1.7.3",
-    "should": "~4.1.0"
+    "mocha": "~2.0.1",
+    "sinon": "~1.7.3",
+    "should": "~4.1.0",
+    "grunt": "~0.4.5",
+    "grunt-mocha-test": "~0.12.2",
+    "grunt-contrib-jshint": "~0.10.0"
   },
   "author": {
     "name": "Borja Fernandez",
