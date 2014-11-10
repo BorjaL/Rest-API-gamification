@@ -37,6 +37,21 @@ describe('Player', function(){
 		});
 	});
 
+	it('can not save itself because the username is already in the db', function(done){
+		//given:
+		var player = new Player({repository: repository});
+		var findPlayerByUsernameStub = sinon.stub(repository, "findPlayerByUsername").callsArgWith(1, null, {player:{name:"Jonh Doe"}});
+
+		//when:
+		player.save(function(error, player_saved){
+			//then:
+			should.exist(error);
+
+			findPlayerByUsernameStub.restore();
+			done();
+		});
+	});
+
 	it('can verify its own password', function(done){
 		//given:
 		var player = new Player({password: 'SecR3T'});
