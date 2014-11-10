@@ -13,17 +13,20 @@ redisClient.on('connect', function () {
 function get(access_token, callback){
 
     redisClient.get(access_token, function(error, player_name) {
-    	if (error) callback (error);
-	    callback(null, player_name);
+    	if (error){
+    		return callback (error);
+    	} 
+	    
+	    returncallback(null, player_name);
 	});
-}
+};
 
 function set(player_name){
 	var token = suid(16);
 	redisClient.set(token, player_name);
 	redisClient.expire(token, 60);
-	return token
-}
+	return token;
+};
 
-module.exports.get = get
-module.exports.set = set
+module.exports.get = get;
+module.exports.set = set;
