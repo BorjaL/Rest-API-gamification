@@ -19,14 +19,14 @@ function get(access_token, callback){
 	    
 	    returncallback(null, player_name);
 	});
-};
+}
 
 function set(player_name){
 	var token = suid(16);
 	redisClient.set(token, player_name);
 	redisClient.expire(token, 60);
 	return token;
-};
+}
 
 module.exports.get = get;
 module.exports.set = set;

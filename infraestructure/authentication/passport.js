@@ -23,4 +23,4 @@ passport.use(new LocalStrategy(function(username, password, done) {
   }
 ));
 
-module.exports = passport
+module.exports = passport;

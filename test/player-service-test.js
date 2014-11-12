@@ -8,8 +8,8 @@ describe('Player service', function(){
 		//given:
 		var defaultAttributesSpy = sinon.spy();
         var getPlayerObjectWithFunction = function(){
-        	return {defaultAttributes: defaultAttributesSpy}
-        }
+        	return {defaultAttributes: defaultAttributesSpy};
+        };
         var getPlayerObjectWithStub = sinon.stub(player_service.player_factory, "getPlayerObjectWith", getPlayerObjectWithFunction);
 
 	    //when:
@@ -30,8 +30,8 @@ describe('Player service', function(){
 		//given:
 		var saveSpy = sinon.spy();
         var getPlayerObjectWithFunction = function(){
-        	return {save: saveSpy}
-        }
+        	return {save: saveSpy};
+        };
         var getPlayerObjectWithStub = sinon.stub(player_service.player_factory, "getPlayerObjectWith", getPlayerObjectWithFunction);
 
 	    //when:
@@ -50,8 +50,8 @@ describe('Player service', function(){
 
 		//given:
 		var getPlayerObjectWithFunction = function(){
-        	return {save: saveSpy}
-        }
+        	return {save: saveSpy};
+        };
         var findPlayerByUsernameStub = sinon.stub(player_service.player_repository, "findPlayerByUsername");
 
 		//when:
@@ -67,8 +67,8 @@ describe('Player service', function(){
 		//given:
 		var verifyPasswordStub = sinon.stub().callsArgWith(1, null, true);
         var getPlayerObjectWithFunction = function(){
-        	return {verifyPassword: verifyPasswordStub}
-        }
+        	return {verifyPassword: verifyPasswordStub};
+        };
         var getPlayerObjectWithStub = sinon.stub(player_service.player_factory, "getPlayerObjectWith", getPlayerObjectWithFunction);
 
         //and:
@@ -84,4 +84,4 @@ describe('Player service', function(){
         done();
 	});
 
-})
+});

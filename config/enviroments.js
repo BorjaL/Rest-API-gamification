@@ -38,9 +38,9 @@ var config = {
 			"name": "gamification"
 		}
 	}
-}
+};
 
 exports.setUp = function(){
-	var node_env = process.env.NODE_ENV || 'development'
-	return config[node_env]
-}
+	var node_env = process.env.NODE_ENV || 'development';
+	return config[node_env];
+};

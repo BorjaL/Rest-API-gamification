@@ -9,7 +9,7 @@ describe('Player', function(){
 		var player = new Player({});
 
 		//when:
-		var attributes = player.defaultAttributes()
+		var attributes = player.defaultAttributes();
 
 		//then:
 		should(attributes.player).have.property('username', '');
@@ -68,9 +68,5 @@ describe('Player', function(){
 				done();
 			});
 		});
-
-
-
-		
-	})
+	});
 });

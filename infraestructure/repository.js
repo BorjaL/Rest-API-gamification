@@ -10,8 +10,8 @@ module.exports.savePlayer = function(player, callback) {
 		}
 
 		return callback(null, result);
-	})
-}
+	});
+};
 
 module.exports.findPlayerByUsername = function(player_username, callback) {
 	db.players.findOne({username: player_username}, function(error, result){
@@ -20,12 +20,12 @@ module.exports.findPlayerByUsername = function(player_username, callback) {
 		}
 
 		return callback(null, result);
-	})
-}
+	});
+};
 
 module.exports.cleanPlayers = function() {
 	db.players.drop(function(error, replay) {});
-}
+};
 
 module.exports.saveGame = function(game, callback) {
 	db.games.save(game, function(error, result) {
@@ -34,8 +34,8 @@ module.exports.saveGame = function(game, callback) {
 		}
 
 		return callback(null, result);
-	})
-}
+	});
+};
 
 this.findGameByName = function(game_name, callback) {
 	db.games.findOne(game_name, function(error, result){
@@ -44,8 +44,8 @@ this.findGameByName = function(game_name, callback) {
 		}
 
 		return callback(null, result);
-	})
-}
+	});
+};
 
 module.exports.findGameById = function(game_id, callback) {
 	db.games.findOne(game_id, function(error, result){
@@ -54,8 +54,8 @@ module.exports.findGameById = function(game_id, callback) {
 		}
 
 		return callback(null, result);
-	})
-}
+	});
+};
 
 module.exports.findAllActionsOfAGame = function(game_id, callback) {
 	db.actions.find(game_id, function(error, result){
@@ -64,8 +64,8 @@ module.exports.findAllActionsOfAGame = function(game_id, callback) {
 		}
 
 		return callback(null, result);
-	})
-}
+	});
+};
 
 module.exports.updateGamePlayers = function(game_name, game_players, callback){
 	db.games.update(game_name, {$set: game_players}, function(error, result){
@@ -74,8 +74,8 @@ module.exports.updateGamePlayers = function(game_name, game_players, callback){
 		}
 
 		return callback(null);
-	})
-}
+	});
+};
 
 module.exports.updatePlayerGames = function(user_id, player_games, callback){
 	db.games.update(user_id, {$set: player_games}, function(error, result){
@@ -84,8 +84,8 @@ module.exports.updatePlayerGames = function(user_id, player_games, callback){
 		}
 
 		return callback(null, result);
-	})
-}
+	});
+};
 
 module.exports.saveNewGameAction = function(action_data, callback){
 	db.actions.save(action_data, function(error, result) {
@@ -94,16 +94,16 @@ module.exports.saveNewGameAction = function(action_data, callback){
 		}
 
 		return callback(null, result);
-	})
-}
+	});
+};
 
 module.exports.cleanGames = function() {
 	db.games.drop(function(error, replay) {});
-}
+};
 
 module.exports.cleanActions = function() {
 	db.actions.drop(function(error, replay) {});
-}
+};
 
 module.exports.saveUserAction = function(checkin_info, callback) {
 	db.activity.save(action_data, function(error, result) {
@@ -112,7 +112,7 @@ module.exports.saveUserAction = function(checkin_info, callback) {
 		}
 
 		return callback(null, result);
-	})
-}
+	});
+};
 
 module.exports.db = db;

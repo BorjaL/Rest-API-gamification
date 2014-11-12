@@ -14,10 +14,10 @@ exports.startServer = function(){
 	server.post('/games.json', function (req, res, next) {
 		game_service.saveAGame(req.params, function (error, game){
 			if (error){
-				res.send(error)
+				res.send(error);
 			}
 			
-			res.send(201, game)
+			res.send(201, game);
 		});
 	});
 
@@ -27,7 +27,7 @@ exports.startServer = function(){
 
 			game_service.form_fields(function (error, form_fields){
 				if (error){
-					res.send(error)
+					res.send(error);
 				}
 
 				res.send(200,{attributes: form_fields, access_token: req.user});
@@ -37,10 +37,10 @@ exports.startServer = function(){
 	server.post('/players.json', function (req, res, next) {
 		player_service.saveAPlayer(req.params, function (error, player){
 			if (error){
-				res.send(error)
+				res.send(error);
 			}
 			
-			res.send(201, player)
+			res.send(201, player);
 		});
 	});
 
@@ -48,7 +48,7 @@ exports.startServer = function(){
 
 		player_service.form_fields(function (error, form_fields){
 			if (error){
-				res.send(error)
+				res.send(error);
 			}
 
 			res.send(200,{attributes: form_fields});
@@ -58,7 +58,7 @@ exports.startServer = function(){
 	server.post('/players/login.json', function (req, res, next) {
 		passport.authenticate('local', { session: false },function(error, player, info) {
 			if (error) {
-		      res.send(error)
+		      res.send(error);
 		    }
 		    if (! player) {
 		      return res.send(200, { success : false, message: info });
@@ -68,6 +68,6 @@ exports.startServer = function(){
 	});
 
 	server.listen(config.server.port, config.server.url,function () {
-		console.log('%s listening at %s', server.name, server.url)
-	})
-}
+		console.log('%s listening at %s', server.name, server.url);
+	});
+};	

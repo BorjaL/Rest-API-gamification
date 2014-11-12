@@ -1,3 +1,3 @@
-var server = require('./infraestructure/server')
+var server = require('./infraestructure/server');
 
-server.startServer()
+server.startServer();

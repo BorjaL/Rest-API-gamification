@@ -9,9 +9,10 @@ module.exports = function(grunt) {
 	    		curly: true,
 	    		eqeqeq: true,
 	    		eqnull: true,
+	    		expr: true
 	    	},
 	    	files: {
-	    		src: ['model/**/*.js']
+	    		src: ['model/**/*.js', '*.js', 'config/**/*.js', 'infraestructure/**/*.js', 'test/**/*.js']
 		  	},
 		},
 	    mochaTest: {
