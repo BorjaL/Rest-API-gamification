@@ -9,7 +9,10 @@ exports.startServer = function(){
 	server
 		.use(passport.initialize())
 		.use(restify.queryParser())
-		.use(restify.bodyParser());
+		.use(restify.bodyParser())
+		.use(restify.CORS({
+    		origins: ['http://localhost:9000']
+		}));
 
 	server.post('/games.json', function (req, res, next) {
 		game_service.saveAGame(req.params, function (error, game){
