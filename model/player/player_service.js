@@ -39,7 +39,8 @@ module.exports.logIn = function(username, password, callback){
 			return callback(false); 
 		}
 
-		var player_found = player_factory.getPlayerObjectWith(player_found_data + {repository: player_repository});
+		player_found_data.repository =  player_repository
+		var player_found = player_factory.getPlayerObjectWith(player_found_data);
 
 		player_found.verifyPassword(password, function(error, isMatch){
 			if (error){ 
