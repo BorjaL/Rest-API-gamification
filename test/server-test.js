@@ -10,6 +10,7 @@ process.env.NODE_ENV = 'test';
 require('../infraestructure/server').startServer();
 
 describe('Server', function(){
+
 	it('save a new game', function(done){
 
 		//given:
