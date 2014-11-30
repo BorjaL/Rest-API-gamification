@@ -59,14 +59,14 @@ exports.startServer = function(){
 	});
 
 	server.post('/players/login.json', function (req, res, next) {
-		passport.authenticate('local', { session: false },function(error, player, info) {
+		passport.authenticate('local', { session: false },function(error, token, info) {
 			if (error) {
 		      res.send(error);
 		    }
-		    if (! player) {
+		    if (!token) {
 		      return res.send(200, { success : false, message: info });
 		    }
-		    return res.send(200, { success : true, player: player});
+		    return res.send(200, { token: token});
 		})(req, res, next);
 	});
 
