@@ -38,12 +38,14 @@ exports.startServer = function(){
 	});
 
 	server.post('/players.json', function (req, res, next) {
-		player_service.saveAPlayer(req.params, function (error, player){
+		player_service.saveAPlayer(req.params, function (error, token){
 			if (error){
+				console.log("Error in saveAPlayer: ", error);
 				res.send(error);
+				next();
 			}
-			
-			res.send(201, player);
+			res.send(201, {token: token});
+			next();
 		});
 	});
 
@@ -66,7 +68,7 @@ exports.startServer = function(){
 		    if (!token) {
 		      return res.send(200, { success : false, message: info });
 		    }
-		    return res.send(200, { token: token});
+		    return res.send(200, {token: token});
 		})(req, res, next);
 	});
 

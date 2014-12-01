@@ -1,6 +1,6 @@
 var player_repository = require('../../infraestructure/repository');
 var player_factory = require('./player_factory');
-
+var redis = require('../../infraestructure/redis');
 
 module.exports.form_fields = function(callback){
 	var player = player_factory.getPlayerObjectWith({repository: player_repository});
@@ -9,14 +9,15 @@ module.exports.form_fields = function(callback){
 };
 
 module.exports.saveAPlayer = function(player_data, callback){
-	var player = player_factory.getPlayerObjectWith(player_data + {repository: player_repository});
+	player_data.repository =  player_repository;
+	var player = player_factory.getPlayerObjectWith(player_data);
 
 	player.save(function (error, player_saved){
 		if ( error ){ 
 			return callback(error); 
 		}
 
-		return callback(null, player_saved);
+		return callback(null, redis.set(player_saved.username));
 	});
 };
 
