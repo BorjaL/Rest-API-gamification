@@ -19,19 +19,18 @@ function Player(data){
 				return callback(error); 
 			}
 			
-			player.password = hash;
-			player.repository.savePlayer(player.toJson(), function (error, player_saved){
+			this.password = hash;
+			this.repository.savePlayer(this.toJson(), function (error, player_saved){
 				if ( error ){ 
 					return callback(error); 
 				}
 
 				return callback(null, player_saved);
 			});
-		});
+		}.bind(this));
 	};
 
 	this.save = function(callback){
-		var player = this;
 		this.repository.findPlayerByUsername(this.username, function (error, player_found){
 			
 			if ( error ){ 
@@ -41,9 +40,9 @@ function Player(data){
 				return callback( new DuplicateUsernameError('this username already exists')); 
 			}
 			else {
-				player.encryptAndSave(player.password, callback);
+				this.encryptAndSave(this.password, callback);
 			}
-		});
+		}.bind(this));
 	};
 
 	this.joinToAGame = function(game_id, callback){
