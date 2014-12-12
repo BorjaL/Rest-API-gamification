@@ -1,12 +1,6 @@
 var game_repository = require('../../infraestructure/repository');
 Game = require('./game').Game;
 
-module.exports.form_fields = function(callback){
-	var game = new Game({name: ""});
-
-	return callback(null, game.defaultAttributes());
-};
-
 module.exports.saveAGame = function(game_data, callback){
 	var game = new Game(game_data);
 

@@ -2,12 +2,6 @@ var player_repository = require('../../infraestructure/repository');
 var player_factory = require('./player_factory');
 var redis = require('../../infraestructure/redis');
 
-module.exports.form_fields = function(callback){
-	var player = player_factory.getPlayerObjectWith({repository: player_repository});
-
-	return callback(null, player.defaultAttributes());
-};
-
 module.exports.saveAPlayer = function(player_data, callback){
 	player_data.repository =  player_repository;
 	var player = player_factory.getPlayerObjectWith(player_data);

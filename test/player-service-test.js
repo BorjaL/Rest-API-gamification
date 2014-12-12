@@ -4,27 +4,6 @@ var assert = require('assert');
 
 describe('Player service', function(){
 
-	it('gets new player fields', function(done){
-		//given:
-		var defaultAttributesSpy = sinon.spy();
-        var getPlayerObjectWithFunction = function(){
-        	return {defaultAttributes: defaultAttributesSpy};
-        };
-        var getPlayerObjectWithStub = sinon.stub(player_service.player_factory, "getPlayerObjectWith", getPlayerObjectWithFunction);
-
-	    //when:
-		player_service.form_fields(function (error, fields){});
-
-		//then:
-		assert.equal(getPlayerObjectWithStub.calledOnce, true);
-		assert.equal(defaultAttributesSpy.calledOnce, true);
-		assert.equal(getPlayerObjectWithStub.calledBefore(defaultAttributesSpy), true);
-
-		getPlayerObjectWithStub.restore();
-		done();
-		
-	});
-
 	it('saves new a player', function(done){
 
 		//given:
