@@ -24,19 +24,6 @@ exports.startServer = function(){
 		});
 	});
 
-	server.get('/games/new.json',
-		passport.authenticate('bearer', { session: false }),
-		function (req, res, next) {
-
-			game_service.form_fields(function (error, form_fields){
-				if (error){
-					res.send(error);
-				}
-
-				res.send(200,{attributes: form_fields, access_token: req.user});
-			});
-	});
-
 	server.post('/players.json', function (req, res, next) {
 		player_service.saveAPlayer(req.params, function (error, token){
 			if (error){
@@ -49,26 +36,26 @@ exports.startServer = function(){
 		});
 	});
 
-	server.get('/players/new.json', function (req, res, next) {
-
-		player_service.form_fields(function (error, form_fields){
+	server.get('/players/:username', function (req, res, next) {
+		player_service.findAPlayer(req.params.username, function (error, player_found){
 			if (error){
 				res.send(error);
+				next();
 			}
-
-			res.send(200,{attributes: form_fields});
+			res.send(200, player_found);
+			next();
 		});
 	});
 
 	server.post('/players/login.json', function (req, res, next) {
-		passport.authenticate('local', { session: false },function(error, token, info) {
+		passport.authenticate('local', { session: false },function(error, token, username) {
 			if (error) {
 		      res.send(error);
 		    }
 		    if (!token) {
-		      return res.send(200, { success : false, message: info });
+		      return res.send(403);
 		    }
-		    return res.send(200, {token: token});
+		    return res.send(200, {token: token, username: username});
 		})(req, res, next);
 	});
 

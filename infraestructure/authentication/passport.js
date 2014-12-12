@@ -18,7 +18,7 @@ passport.use(new LocalStrategy(function(username, password, done) {
         if (!username) { 
         	return done(null, false, "Wrong credentials"); 
         }
-        return done(null, redis.set(username));
+        return done(null, redis.set(username), username);
       });
   }
 ));
