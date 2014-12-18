@@ -11,8 +11,14 @@ exports.startServer = function(){
 		.use(restify.queryParser())
 		.use(restify.bodyParser())
 		.use(restify.CORS({
-    		origins: ['http://localhost:9000']
-		}));
+			origins: ['http://localhost:9000']
+		}))
+		.use(restify.fullResponse());
+
+	server.opts(/\.*/, function (req, res, next) {
+		res.send(200);
+		next();
+	});
 
 	server.post('/games.json', function (req, res, next) {
 		game_service.saveAGame(req.params, function (error, game){
@@ -36,7 +42,7 @@ exports.startServer = function(){
 		});
 	});
 
-	server.get('/players/:username', function (req, res, next) {
+	server.get('/players/:username', passport.authenticate('bearer', { session: false }),function (req, res, next) {
 		player_service.findAPlayer(req.params.username, function (error, player_found){
 			if (error){
 				res.send(error);
