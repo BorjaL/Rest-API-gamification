@@ -17,7 +17,7 @@ function get(access_token, callback){
     		return callback (error);
     	} 
 	    
-	    returncallback(null, player_name);
+	    return callback(null, player_name);
 	});
 }
 
