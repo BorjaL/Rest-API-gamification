@@ -33,4 +33,8 @@ describe('Server', function(){
             }
         });
 	});
+
+    it('find a new player', function(done){
+        done();
+    });
 });
