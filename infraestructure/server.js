@@ -33,6 +33,11 @@ exports.startServer = function(){
 	server.post('/players.json', function (req, res, next) {
 		player_service.saveAPlayer(req.params, function (error, token){
 			if (error){
+				if (error instanceof DuplicateUsernameError){
+					console.log("Duplicate username: ", error);
+					res.send(409, error);
+					next();
+				}
 				console.log("Error in saveAPlayer: ", error);
 				res.send(error);
 				next();

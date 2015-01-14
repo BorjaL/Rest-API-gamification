@@ -5,6 +5,8 @@ var client = require('restify').createJsonClient({
     url: 'http://dev.gamification.com:3001'
 });
 var game_service = require('../model/game/game_service');
+var game_service = require('../model/player/player_service');
+DuplicateUsernameError = require('../model/error/duplicate_username_error').DuplicateUsernameError;
 
 process.env.NODE_ENV = 'test';
 require('../infraestructure/server').startServer();
@@ -15,10 +17,10 @@ describe('Server', function(){
 
 		//given:
         var data = {game: true};
-		var saveAStub = sinon.stub(game_service, "saveAGame").callsArgWith(1, null, data);
+		var saveAGameStub = sinon.stub(game_service, "saveAGame").callsArgWith(1, null, data);
 
 		//when:
-		client.post('/games.json', {},function(err, req, res, data) {
+		client.post('/games.json', {},function(err, req, res, data){
             if (err) {
                 throw new Error(err);
             }
@@ -33,6 +35,18 @@ describe('Server', function(){
             }
         });
 	});
+
+    it('try to save a new player but already exists', function(){
+        //given:
+        var saveAGameStub = sinon.stub(player_service, "saveAPlayer").callsArgWith(1, null, {error: new DuplicateUsernameError('')});
+
+        //when:
+        client.post('/players.json', {}, function(err, req, res, data){
+            //then:
+            assert.equal(res.statusCode, 409);
+            done();
+        });
+    }),
 
     it('find a new player', function(done){
         done();
