@@ -14,7 +14,7 @@ describe('Player service', function(){
         var getPlayerObjectWithStub = sinon.stub(player_service.player_factory, "getPlayerObjectWith", getPlayerObjectWithFunction);
 
 	    //when:
-	    player_service.saveAPlayer({}, function(error, player_saved){});
+	    player_service.saveAPlayer({}, function(error, token, username){});
 
 	    //then:
 	    assert.equal(getPlayerObjectWithStub.calledOnce, true);

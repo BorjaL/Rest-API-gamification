@@ -31,7 +31,7 @@ exports.startServer = function(){
 	});
 
 	server.post('/players.json', function (req, res, next) {
-		player_service.saveAPlayer(req.params, function (error, token){
+		player_service.saveAPlayer(req.params, function (error, token, username){
 			if (error){
 				if (error instanceof DuplicateUsernameError){
 					console.log("Duplicate username: ", error);
@@ -42,20 +42,22 @@ exports.startServer = function(){
 				res.send(error);
 				next();
 			}
-			res.send(201, {token: token});
+			res.send(201, {token: token, username: username});
 			next();
 		});
 	});
 
-	server.get('/players/:username', passport.authenticate('bearer', { session: false }),function (req, res, next) {
-		player_service.findAPlayer(req.params.username, function (error, player_found){
-			if (error){
-				res.send(error);
+	server.get('/players/:username',function (req, res, next) {
+		passport.authenticate('bearer', { session: false },function(error, token, username) {
+			player_service.findAPlayer(req.params.username, function (error, player_found){
+				if (error){
+					res.send(error);
+					next();
+				}
+				res.send(200, {player: player_found, is_owner: token !== false});
 				next();
-			}
-			res.send(200, player_found);
-			next();
-		});
+			});
+		})(req, res, next);
 	});
 
 	server.post('/players/login.json', function (req, res, next) {

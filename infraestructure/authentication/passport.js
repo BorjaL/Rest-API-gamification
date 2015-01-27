@@ -8,7 +8,7 @@ passport.use(new BearerStrategy(function(token, done) {
 	redis.get(token, function(err, player_name) {
         if (err) { return done(err); }
         if (!player_name) { return done(null, false); }
-        return done(null, token);
+        return done(null, token, player_name);
      });
  }));
 

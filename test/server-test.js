@@ -5,7 +5,7 @@ var client = require('restify').createJsonClient({
     url: 'http://dev.gamification.com:3001'
 });
 var game_service = require('../model/game/game_service');
-var game_service = require('../model/player/player_service');
+var player_service = require('../model/player/player_service');
 DuplicateUsernameError = require('../model/error/duplicate_username_error').DuplicateUsernameError;
 
 process.env.NODE_ENV = 'test';
@@ -38,7 +38,7 @@ describe('Server', function(){
 
     it('try to save a new player but already exists', function(){
         //given:
-        var saveAGameStub = sinon.stub(player_service, "saveAPlayer").callsArgWith(1, null, {error: new DuplicateUsernameError('')});
+        var saveAGameStub = sinon.stub(player_service, "saveAPlayer").returns({error: new DuplicateUsernameError('')});
 
         //when:
         client.post('/players.json', {}, function(err, req, res, data){

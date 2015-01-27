@@ -11,7 +11,7 @@ module.exports.saveAPlayer = function(player_data, callback){
 			return callback(error); 
 		}
 
-		return callback(null, redis.set(player_saved.username));
+		return callback(null, redis.set(player_saved.username), player_saved.username);
 	});
 };
 
