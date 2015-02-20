@@ -48,16 +48,26 @@ exports.startServer = function(){
 	});
 
 	server.get('/players/:username',function (req, res, next) {
-		passport.authenticate('bearer', { session: false },function(error, token, username) {
-			player_service.findAPlayer(req.params.username, function (error, player_found){
-				if (error){
-					res.send(error);
-					next();
-				}
-				res.send(200, {player: player_found, is_owner: token !== false});
+		player_service.findAPlayer(req.params.username, function (error, player_found){
+			if (error){
+				res.send(error);
 				next();
-			});
-		})(req, res, next);
+			}
+			console.log(player_found)
+			if (player_found){
+				passport.authenticate('bearer', { session: false },function(error, token, username) {
+				
+					
+					res.send(200, {player: player_found, is_owner: token !== false});
+					next();
+				
+				})(req, res, next);
+			}
+			else{
+				res.send(404);
+				next();
+			}
+		});
 	});
 
 	server.post('/players/login.json', function (req, res, next) {
