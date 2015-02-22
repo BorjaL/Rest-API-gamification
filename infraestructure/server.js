@@ -56,7 +56,7 @@ exports.startServer = function(){
 			}
 			if (player_found){
 				passport.authenticate('bearer', { session: false },function(error, token, username) {
-					res.send(200, {player: player_found, is_owner: token !== false});
+					res.send(200, {player: player_found, is_owner: username === player_found.username, is_active: token !== false});
 					next();
 				
 				})(req, res, next);
