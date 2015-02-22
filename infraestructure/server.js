@@ -16,7 +16,8 @@ exports.startServer = function(){
 		.use(restify.fullResponse());
 
 	server.opts(/\.*/, function (req, res, next) {
-		res.send(200);
+		res.header('Access-Control-Allow-Headers', 'authorization, Content-Type');
+		res.send(204);
 		next();
 	});
 
@@ -53,11 +54,8 @@ exports.startServer = function(){
 				res.send(error);
 				next();
 			}
-			console.log(player_found)
 			if (player_found){
 				passport.authenticate('bearer', { session: false },function(error, token, username) {
-				
-					
 					res.send(200, {player: player_found, is_owner: token !== false});
 					next();
 				
