@@ -56,8 +56,14 @@ exports.startServer = function(){
 			}
 			if (player_found){
 				passport.authenticate('bearer', { session: false },function(error, token, username) {
-					res.send(200, {player: player_found, is_owner: username === player_found.username, is_active: token !== false});
-					next();
+					if (token){
+						res.send(200, {player: player_found, is_owner: username === player_found.username, is_active: token !== false});
+						next();
+					}
+					else{
+						res.send(401);
+						next();
+					}
 				
 				})(req, res, next);
 			}
@@ -74,10 +80,15 @@ exports.startServer = function(){
 		      res.send(error);
 		    }
 		    if (!token) {
-		      return res.send(403);
+		      return res.send(401);
 		    }
 		    return res.send(200, {token: token, username: username});
 		})(req, res, next);
+	});
+
+	server.get('/permission/createGame', passport.authenticate('bearer', { session: false }),function(req, res, next){
+		res.send(204);
+		next();
 	});
 
 	server.listen(config.server.port, config.server.url,function () {
