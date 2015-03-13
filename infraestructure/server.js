@@ -21,14 +21,23 @@ exports.startServer = function(){
 		next();
 	});
 
-	server.post('/games.json', function (req, res, next) {
+	server.post('/games.json', passport.authenticate('bearer', { session: false }), function (req, res, next) {
 		game_service.saveAGame(req.params, function (error, game){
 			if (error){
+				console.log("Creating a game ", error);
 				res.send(error);
+				next();
 			}
 			
 			res.send(201, game);
+			next();
 		});
+	});
+
+
+	server.get('/permission/createGame', passport.authenticate('bearer', { session: false }),function(req, res, next){
+		res.send(204);
+		next();
 	});
 
 	server.post('/players.json', function (req, res, next) {
@@ -84,11 +93,6 @@ exports.startServer = function(){
 		    }
 		    return res.send(200, {token: token, username: username});
 		})(req, res, next);
-	});
-
-	server.get('/permission/createGame', passport.authenticate('bearer', { session: false }),function(req, res, next){
-		res.send(204);
-		next();
 	});
 
 	server.listen(config.server.port, config.server.url,function () {
