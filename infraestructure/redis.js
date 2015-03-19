@@ -24,7 +24,7 @@ function get(access_token, callback){
 function set(player_name){
 	var token = suid(16);
 	redisClient.set(token, player_name);
-	redisClient.expire(token, 60);
+	redisClient.expire(token, 600);
 	return token;
 }
 
