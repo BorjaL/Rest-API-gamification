@@ -1,5 +1,6 @@
 var gameRepository = require('../../infraestructure/repository');
 DuplicateGameNameError = require('../error/duplicate_game_name_error').DuplicateGameNameError;
+var url_slug = require('../util/url_slug');
 
 function Game(data){
 	this._id = data._id;
@@ -8,6 +9,9 @@ function Game(data){
 	this.created_at = new Date();
 	this.players = [];
 	this.actions = data.actions;
+	this.url = url_slug(data.name);
+
+
 
 	this.save = function(callback){
 		var game = this;
@@ -56,7 +60,8 @@ function Game(data){
 				_id: this._id, 
 				name: 	this.name,
 				actions: this.actions,
-				created_at: this.created_at
+				created_at: this.created_at,
+				url: this.url
 			};
 	};
 
