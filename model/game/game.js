@@ -7,9 +7,9 @@ function Game(data){
 	this.name = data.name;
 	this.owner = data.owner;
 	this.created_at = new Date();
-	this.players = [];
+	this.players = data.players;
 	this.actions = data.actions;
-	this.url = url_slug(data.name);
+	this.url =  this.owner + '/game/' + url_slug(data.name);
 
 
 
@@ -61,6 +61,7 @@ function Game(data){
 				name: 	this.name,
 				actions: this.actions,
 				owner: this.owner,
+				players: this.players,
 				created_at: this.created_at,
 				url: this.url
 			};

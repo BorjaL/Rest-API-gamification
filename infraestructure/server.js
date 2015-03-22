@@ -33,6 +33,7 @@ exports.startServer = function(){
 		      next();
 		    }
 		    req.params.owner = username;
+		    req.params.players = [username];
 			game_service.saveAGame(req.params, function (error, game){
 				if (error){
 					console.log("Creating a game ", error);
@@ -40,7 +41,7 @@ exports.startServer = function(){
 					next();
 				}
 				
-				res.send(201, game);
+				res.send(201, game.url);
 				next();
 			});
 		})(req, res, next);
