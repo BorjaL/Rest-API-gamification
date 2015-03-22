@@ -60,6 +60,7 @@ function Game(data){
 				_id: this._id, 
 				name: 	this.name,
 				actions: this.actions,
+				owner: this.owner,
 				created_at: this.created_at,
 				url: this.url
 			};

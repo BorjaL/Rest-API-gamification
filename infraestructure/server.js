@@ -21,17 +21,29 @@ exports.startServer = function(){
 		next();
 	});
 
-	server.post('/games.json', passport.authenticate('bearer', { session: false }), function (req, res, next) {
-		game_service.saveAGame(req.params, function (error, game){
-			if (error){
-				console.log("Creating a game ", error);
+	server.post('/games.json', function (req, res, next) {
+		passport.authenticate('bearer', { session: false },function(error, token, username) {
+			if (error) {
+				console.log("Athenticating user for creating game " + error);
 				res.send(error);
 				next();
-			}
-			
-			res.send(201, game);
-			next();
-		});
+		    }
+		    if (!token) {
+		      res.send(401);
+		      next();
+		    }
+		    req.params.owner = username;
+			game_service.saveAGame(req.params, function (error, game){
+				if (error){
+					console.log("Creating a game ", error);
+					res.send(error);
+					next();
+				}
+				
+				res.send(201, game);
+				next();
+			});
+		})(req, res, next);
 	});
 
 
