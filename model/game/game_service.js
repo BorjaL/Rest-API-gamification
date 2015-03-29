@@ -13,8 +13,8 @@ module.exports.saveAGame = function(game_data, callback){
 	});
 };
 
-module.exports.findAGame = function(game_name, callback){
-	game_repository.findGameByName(game_name, function (error, game_found){
+module.exports.findAGame = function(username, gamename, callback){
+	game_repository.findGameByOwnerAndUrl(username, gamename, function (error, game_found){
 		if ( error ){ 
 			return callback(error); 
 		}

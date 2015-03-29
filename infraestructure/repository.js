@@ -37,8 +37,8 @@ module.exports.saveGame = function(game, callback) {
 	});
 };
 
-this.findGameByName = function(game_name, callback) {
-	db.games.findOne(game_name, function(error, result){
+this.findGameByOwnerAndUrl = function(username, gamename, callback) {
+	db.games.findOne({url: username + '/game/' + gamename}, function(error, result){
 		if ( error ){
 			return callback(error);
 		}

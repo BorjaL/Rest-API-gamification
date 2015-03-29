@@ -47,6 +47,30 @@ exports.startServer = function(){
 		})(req, res, next);
 	});
 
+	server.get('/games/:username/:gamename', function(req, res, next){
+		passport.authenticate('bearer', { session: false },function(error, token, username) {
+			if (error) {
+				console.log("Athenticating user for getting game info " + error);
+				res.send(error);
+				next();
+		    }
+
+		    game_service.findAGame(req.params.username, req.params.gamename, function(error, game_info){
+		    	if (error){
+		    		console.log("Finding a game " + error);
+		    		res.send(error);
+		    		next();
+		    	}
+		    	else if(game_info === null){
+		    		res.send(404);
+		    		next();
+		    	}
+
+		    	res.send(200, game_info)
+		    })
+		})(req, res, next);
+	});
+
 
 	server.get('/permission/createGame', passport.authenticate('bearer', { session: false }),function(req, res, next){
 		res.send(204);
