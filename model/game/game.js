@@ -15,7 +15,7 @@ function Game(data){
 
 	this.save = function(callback){
 		var game = this;
-		gameRepository.findGameByName({name: this.name}, function (error, game_found){
+		gameRepository.findGameByOwnerAndUrl(this.owner, this.name, function (error, game_found){
 			if ( error ){ 
 				return callback(error); 
 			}
