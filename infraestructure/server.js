@@ -56,18 +56,22 @@ exports.startServer = function(){
 		    }
 
 		    game_service.findAGame(req.params.username, req.params.gamename, function(error, game_info){
-		    	if (error){
-		    		console.log("Finding a game " + error);
-		    		res.send(error);
-		    		next();
-		    	}
-		    	else if(game_info === null){
-		    		res.send(404);
-		    		next();
-		    	}
+		    	game_service.userPlaysInTheGame(username, game_info, function(error, userIsAPlayer){
+		    		if (error){
+			    		console.log("Finding a game " + error);
+			    		res.send(error);
+			    		next();
+			    	}
+			    	else if(game_info === null){
+			    		res.send(404);
+			    		next();
+			    	}
 
-		    	res.send(200, game_info)
-		    })
+			    	game_info.userIsAPlayer = userIsAPlayer;
+			    	res.send(200, game_info);
+			    	next();
+		    	});
+		    });
 		})(req, res, next);
 	});
 

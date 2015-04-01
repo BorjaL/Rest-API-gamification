@@ -23,6 +23,15 @@ module.exports.findAGame = function(username, gamename, callback){
 	});
 };
 
+module.exports.userPlaysInTheGame = function(username, game, callback){
+	if (game.players.indexOf(username) !== -1){
+		callback(null, true);
+	}
+	else{
+		callback(null, false);
+	}
+}
+
 module.exports.saveAnAction = function(action_data, callback){
 	game_repository.findGameById({_id: action_data.game}, function (error, game_found){
 		var game = new Game(game_found);
