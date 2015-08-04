@@ -32,6 +32,17 @@ module.exports.userPlaysInTheGame = function(username, game, callback){
 	}
 }
 
+module.exports.findAllGamesByPlayer = function(username, callback){
+	game_repository.findGamesByPlayer(username, function (error, list_of_games){
+		if (error){
+			callback(error);
+		}
+		else{
+			callback(null, list_of_games);
+		}
+	});
+}
+
 module.exports.saveAnAction = function(action_data, callback){
 	game_repository.findGameById({_id: action_data.game}, function (error, game_found){
 		var game = new Game(game_found);

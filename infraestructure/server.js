@@ -75,6 +75,20 @@ exports.startServer = function(){
 		})(req, res, next);
 	});
 
+	server.get('/:username/games', function(req, res, next){
+		game_service.findAllGamesByPlayer(req.params.username, function(error, listOfGames){
+			if (error){
+				console.log("Finding all games of " + req.params.username + ": " + error);
+			    res.send(error);
+			    next();
+			}
+			else{
+				res.send(200, listOfGames);
+				next();
+			}
+		});
+	});
+
 
 	server.get('/permission/createGame', passport.authenticate('bearer', { session: false }),function(req, res, next){
 		res.send(204);

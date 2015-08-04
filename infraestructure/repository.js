@@ -57,6 +57,16 @@ module.exports.findGameById = function(game_id, callback) {
 	});
 };
 
+module.exports.findGamesByPlayer = function(username, callback) {
+	db.games.find({ players: { $in: [username]}}, function(error, result){
+		if ( error ){
+			return callback(error);
+		}
+
+		return callback(null, result);
+	})
+}
+
 module.exports.findAllActionsOfAGame = function(game_id, callback) {
 	db.actions.find(game_id, function(error, result){
 		if ( error ){
