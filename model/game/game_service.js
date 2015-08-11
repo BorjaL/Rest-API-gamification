@@ -65,22 +65,3 @@ module.exports.findAllActionsOfAGame = function(game_id, callback){
 		return callback(null, actions_found);
 	});
 };
-
-module.exports.joinToTheGame = function(userAndGameInfo, callback){
-	var service = this;
-	game_repository.findPlayerByUsername({username: userAndGameInfo.player}, function(error, player_found){
-		game_repository.findGameByName({name: userAndGameInfo.game}, function(error, game_found){
-			var game = new Game(game_found);
-			var player = new Player(player_found);
-			game.addAPlayer(player._id, function(error){
-				player.joinToAGame(game._id, function(error){
-					if (error){ 
-						return callback(error); 
-					}
-
-					return callback(null);
-				});
-			});
-		});
-	});
-};

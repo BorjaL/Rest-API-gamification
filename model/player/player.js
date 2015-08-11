@@ -45,30 +45,6 @@ function Player(data){
 		}.bind(this));
 	};
 
-	this.joinToAGame = function(game_id, callback){
-		this.games.push(game_id);
-		player_repository.updatePlayerGames({_id: this._id}, {games: this.games},function (error){
-			if ( error ){ 
-				return callback(error); 
-			}
-
-			return callback(null);
-		});
-	};
-
-	this.completeAnAction = function(game_info, callback){
-		player_repository.saveUserAction({player_id: this._id, 
-							game_id: game_info.game_id,
-							action_id: game_info.action_id},function (error, result){
-			
-			if ( error ){ 
-				return callback(error); 
-			}
-
-			return callback(null, result);
-		});
-	};
-
 	this.toJson = function(){
 		return  {
 				username: this.username,

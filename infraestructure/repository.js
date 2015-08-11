@@ -87,16 +87,6 @@ module.exports.updateGamePlayers = function(game_name, game_players, callback){
 	});
 };
 
-module.exports.updatePlayerGames = function(user_id, player_games, callback){
-	db.games.update(user_id, {$set: player_games}, function(error, result){
-		if ( error ){
-			return callback(error);
-		}
-
-		return callback(null, result);
-	});
-};
-
 module.exports.saveNewGameAction = function(action_data, callback){
 	db.actions.save(action_data, function(error, result) {
 		if ( error ){
@@ -113,16 +103,6 @@ module.exports.cleanGames = function() {
 
 module.exports.cleanActions = function() {
 	db.actions.drop(function(error, replay) {});
-};
-
-module.exports.saveUserAction = function(checkin_info, callback) {
-	db.activity.save(action_data, function(error, result) {
-		if ( error ){
-			return callback(error);
-		}
-
-		return callback(null, result);
-	});
 };
 
 module.exports.db = db;
