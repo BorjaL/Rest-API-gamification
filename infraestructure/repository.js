@@ -67,16 +67,6 @@ module.exports.findGamesByPlayer = function(username, callback) {
 	})
 }
 
-module.exports.findAllActionsOfAGame = function(game_id, callback) {
-	db.actions.find(game_id, function(error, result){
-		if ( error ){
-			return callback(error);
-		}
-
-		return callback(null, result);
-	});
-};
-
 module.exports.updateGamePlayers = function(game_name, game_players, callback){
 	db.games.update(game_name, {$set: game_players}, function(error, result){
 		if ( error ){
