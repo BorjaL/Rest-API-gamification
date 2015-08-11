@@ -97,6 +97,16 @@ module.exports.saveNewGameAction = function(action_data, callback){
 	});
 };
 
+module.exports.completeAnAction = function(game, action_completed, callback){
+	db.games.update(game, {$push: action_completed},function(error, result) {
+		if ( error ){
+			return callback(error);
+		}
+
+		return callback(null, result);
+	});
+};
+
 module.exports.cleanGames = function() {
 	db.games.drop(function(error, replay) {});
 };

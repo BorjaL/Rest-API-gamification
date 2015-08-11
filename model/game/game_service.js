@@ -65,3 +65,12 @@ module.exports.findAllActionsOfAGame = function(game_id, callback){
 		return callback(null, actions_found);
 	});
 };
+
+module.exports.completeAnAction = function(username, game, action, callback){
+	game_repository.completeAnAction({name: game}, {activity: {player: username, action: action, date: new Date()}},function(error, game_found){
+		if (error){
+			return callback(error);
+		}
+		 return callback(null);
+	});
+};

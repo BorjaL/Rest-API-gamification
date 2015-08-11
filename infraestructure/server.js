@@ -150,6 +150,28 @@ exports.startServer = function(){
 		})(req, res, next);
 	});
 
+	server.post('/actions', function (req, res, next) {
+		passport.authenticate('bearer', { session: false },function(error, token, username) {
+			if (error) {
+				console.log("Error authenticating for completing an action: " + error);
+				res.send(error);
+				next();
+			}
+			if (!token) {
+				res.send(401);
+				next();
+			}
+			game_service.completeAnAction(req.params.username, req.params.gamename, req.params.action, function(error){
+				if (error) {
+					console.log("Error during completing an action: " + error);
+					res.send(error);
+					next();
+				}
+				res.send(200);
+			});
+		})(req, res, next);
+	}
+
 	server.listen(config.server.port, config.server.url,function () {
 		console.log('%s listening at %s', server.name, server.url);
 	});
