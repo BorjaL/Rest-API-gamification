@@ -161,7 +161,7 @@ exports.startServer = function(){
 				res.send(401);
 				next();
 			}
-			game_service.completeAnAction(req.params.username, req.params.gamename, req.params.action, function(error){
+			game_service.completeAnAction(username, req.params.game_name, req.params.action_info, function(error){
 				if (error) {
 					console.log("Error during completing an action: " + error);
 					res.send(error);
