@@ -57,10 +57,13 @@ module.exports.saveAnAction = function(action_data, callback){
 };
 
 module.exports.completeAnAction = function(username, game_name, action, callback){
-	game_repository.completeAnAction({name: game_name}, {activity: {player: username, action: action.name, points: action.points, date: new Date()}},function(error, game_found){
+
+	var action_info = {player: username, action: action.name, points: action.points, date: new Date()}
+
+	game_repository.completeAnAction({name: game_name}, {activity: action_info},function(error, game_info){
 		if (error){
 			return callback(error);
 		}
-		 return callback(null);
+		 return callback(null, action_info);
 	});
 };
