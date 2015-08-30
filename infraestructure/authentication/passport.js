@@ -5,6 +5,7 @@ player_service = require('../../model/player/player_service');
 var redis = require('../redis'); 
 
 passport.use(new BearerStrategy(function(token, done) {
+
 	redis.get(token, function(err, player_name) {
         if (err) { return done(err); }
         if (!player_name) { return done(null, false); }

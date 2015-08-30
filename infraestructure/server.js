@@ -76,17 +76,42 @@ exports.startServer = function(){
 	});
 
 	server.get('/:username/games', function(req, res, next){
-		game_service.findAllGamesByPlayer(req.params.username, function(error, listOfGames){
+		game_service.findAllGamesByPlayer(req.params.username, function(error, list_of_games){
 			if (error){
 				console.log("Finding all games of " + req.params.username + ": " + error);
 			    res.send(error);
 			    next();
 			}
 			else{
-				res.send(200, listOfGames);
+				res.send(200, list_of_games);
 				next();
 			}
 		});
+	});
+
+	server.post('/games/join', function(req, res, next){
+		passport.authenticate('bearer', { session: false },function(error, token, username) {
+			if (error) {
+				console.log("Athenticating user joining the game " + error);
+				res.send(error);
+				next();
+			}
+
+			if (!token) {
+				res.send(401);
+				next();
+			}
+
+			game_service.joinTheGame(req.params.game_url, username, function(error){
+				if (error){
+					console.log("Joining the game error", error);
+					res.send(error);
+					next();
+				}
+				res.send(200);
+				next();
+			});
+		})(req, res, next);
 	});
 
 

@@ -43,19 +43,6 @@ module.exports.findAllGamesByPlayer = function(username, callback){
 	});
 }
 
-module.exports.saveAnAction = function(action_data, callback){
-	game_repository.findGameById({_id: action_data.game}, function (error, game_found){
-		var game = new Game(game_found);
-		game.addAnAction(action_data, function(error){
-			if (error){ 
-				return callback(error); 
-			}
-
-			return callback(null);
-		});
-	});
-};
-
 module.exports.completeAnAction = function(username, game_name, action, callback){
 
 	var action_info = {player: username, action: action.name, points: action.points, date: new Date()}
@@ -65,5 +52,17 @@ module.exports.completeAnAction = function(username, game_name, action, callback
 			return callback(error);
 		}
 		 return callback(null, action_info);
+	});
+};
+
+module.exports.joinTheGame = function(game_url, username, callback){
+	game_repository.findAndModifyGame({url: game_url}, username, function (error, game_found){
+		
+		if (error){
+			callback(error);
+		}
+		else {
+			callback(null);
+		}
 	});
 };

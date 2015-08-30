@@ -97,6 +97,19 @@ module.exports.completeAnAction = function(game, action_completed, callback){
 	});
 };
 
+module.exports.findAndModifyGame = function(game_url, username, callback){
+	db.games.findAndModify({
+		query: game_url,
+		update: {$push: {players: username}}
+	}, function(error, result){
+		if ( error ){
+			return callback(error);
+		}
+
+		return callback(null, result);
+	});
+};
+
 module.exports.cleanGames = function() {
 	db.games.drop(function(error, replay) {});
 };
