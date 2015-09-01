@@ -18,7 +18,6 @@ exports.startServer = function(){
 	server.opts(/\.*/, function (req, res, next) {
 		res.header('Access-Control-Allow-Headers', 'authorization, Content-Type');
 		res.send(204);
-		next();
 	});
 
 	server.post('/games.json', function (req, res, next) {
@@ -26,24 +25,22 @@ exports.startServer = function(){
 			if (error) {
 				console.log("Athenticating user for creating game " + error);
 				res.send(error);
-				next();
-		    }
-		    if (!token) {
-		      res.send(401);
-		      next();
-		    }
-		    req.params.owner = username;
-		    req.params.players = [username];
-			game_service.saveAGame(req.params, function (error, game){
-				if (error){
-					console.log("Creating a game ", error);
-					res.send(error);
-					next();
-				}
-				
-				res.send(201, game.url);
-				next();
-			});
+			}
+			else if (!token) {
+				res.send(401);
+			}
+			else{
+				req.params.owner = username;
+				req.params.players = [username];
+				game_service.saveAGame(req.params, function (error, game){
+					if (error){
+						console.log("Creating a game ", error);
+						return res.send(error);
+					}
+					
+					res.send(201, game.url);
+				});
+			}
 		})(req, res, next);
 	});
 
@@ -52,26 +49,24 @@ exports.startServer = function(){
 			if (error) {
 				console.log("Athenticating user for getting game info " + error);
 				res.send(error);
-				next();
-		    }
-
-		    game_service.findAGame(req.params.username, req.params.gamename, function(error, game_info){
-		    	game_service.userPlaysInTheGame(username, game_info, function(error, userIsAPlayer){
-		    		if (error){
-			    		console.log("Finding a game " + error);
-			    		res.send(error);
-			    		next();
-			    	}
-			    	else if(game_info === null){
-			    		res.send(404);
-			    		next();
-			    	}
-
-			    	game_info.userIsAPlayer = userIsAPlayer;
-			    	res.send(200, game_info);
-			    	next();
-		    	});
-		    });
+			}
+			else{
+				game_service.findAGame(req.params.username, req.params.gamename, function(error, game_info){
+					game_service.userPlaysInTheGame(username, game_info, function(error, userIsAPlayer){
+						if (error){
+							console.log("Finding a game " + error);
+							res.send(error);
+						}
+						else if(game_info === null){
+							res.send(404);
+						}
+						else{
+							game_info.userIsAPlayer = userIsAPlayer;
+							res.send(200, game_info);
+						}
+					});
+				});
+			}
 		})(req, res, next);
 	});
 
@@ -79,12 +74,10 @@ exports.startServer = function(){
 		game_service.findAllGamesByPlayer(req.params.username, function(error, list_of_games){
 			if (error){
 				console.log("Finding all games of " + req.params.username + ": " + error);
-			    res.send(error);
-			    next();
+				res.send(error);
 			}
 			else{
 				res.send(200, list_of_games);
-				next();
 			}
 		});
 	});
@@ -93,23 +86,19 @@ exports.startServer = function(){
 		passport.authenticate('bearer', { session: false },function(error, token, username) {
 			if (error) {
 				console.log("Athenticating user joining the game " + error);
-				res.send(error);
-				next();
+				return res.send(error);
 			}
 
 			if (!token) {
-				res.send(401);
-				next();
+				return res.send(401);
 			}
 
 			game_service.joinTheGame(req.params.game_url, username, function(error){
 				if (error){
 					console.log("Joining the game error", error);
 					res.send(error);
-					next();
 				}
 				res.send(200);
-				next();
 			});
 		})(req, res, next);
 	});
@@ -117,7 +106,6 @@ exports.startServer = function(){
 
 	server.get('/permission/createGame', passport.authenticate('bearer', { session: false }),function(req, res, next){
 		res.send(204);
-		next();
 	});
 
 	server.post('/players.json', function (req, res, next) {
@@ -125,15 +113,12 @@ exports.startServer = function(){
 			if (error){
 				if (error instanceof DuplicateUsernameError){
 					console.log("Duplicate username: ", error);
-					res.send(409, error);
-					next();
+					return res.send(409, error);
 				}
 				console.log("Error in saveAPlayer: ", error);
-				res.send(error);
-				next();
+				return res.send(error);
 			}
 			res.send(201, {token: token, username: username});
-			next();
 		});
 	});
 
@@ -141,24 +126,20 @@ exports.startServer = function(){
 		player_service.findAPlayer(req.params.username, function (error, player_found){
 			if (error){
 				res.send(error);
-				next();
 			}
 			if (player_found){
 				passport.authenticate('bearer', { session: false },function(error, token, username) {
 					if (token){
 						res.send(200, {player: player_found, is_owner: username === player_found.username, is_active: token !== false});
-						next();
 					}
 					else{
 						res.send(401);
-						next();
 					}
 				
 				})(req, res, next);
 			}
 			else{
 				res.send(404);
-				next();
 			}
 		});
 	});
@@ -166,12 +147,12 @@ exports.startServer = function(){
 	server.post('/players/login.json', function (req, res, next) {
 		passport.authenticate('local', { session: false },function(error, token, username) {
 			if (error) {
-		      res.send(error);
-		    }
-		    if (!token) {
-		      return res.send(401);
-		    }
-		    return res.send(200, {token: token, username: username});
+				return res.send(error);
+			}
+			else if (!token) {
+				return res.send(401);
+			}
+			res.send(200, {token: token, username: username});
 		})(req, res, next);
 	});
 
@@ -179,21 +160,17 @@ exports.startServer = function(){
 		passport.authenticate('bearer', { session: false },function(error, token, username) {
 			if (error) {
 				console.log("Error authenticating for completing an action: " + error);
-				res.send(error);
-				next();
+				return res.send(error);
 			}
 			if (!token) {
-				res.send(401);
-				next();
+				return res.send(401);
 			}
 			game_service.completeAnAction(username, req.params.game_name, req.params.action_info, function(error, action_info){
 				if (error) {
 					console.log("Error during completing an action: " + error);
 					res.send(error);
-					next();
 				}
 				res.send(200, action_info);
-				next();
 			});
 		})(req, res, next);
 	});
