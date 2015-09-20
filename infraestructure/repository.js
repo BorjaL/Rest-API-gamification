@@ -1,7 +1,7 @@
 var mongojs = require('mongojs');
 
 var config = require('../config/enviroments').setUp();
-var db = mongojs(config.mongodb.url+":"+config.mongodb.port+"/"+config.mongodb.name, ['players','games','actions', 'activity', 'tokens']);
+var db = mongojs(config.mongodb.url+":"+config.mongodb.port+"/"+config.mongodb.name, ['players','games','actions', 'activity', 'leads']);
 
 module.exports.savePlayer = function(player, callback) {
 	db.players.save(player, function(error, result) {
@@ -109,6 +109,16 @@ module.exports.findAndModifyGame = function(game_url, username, callback){
 		return callback(null, result);
 	});
 };
+
+module.exports.saveNewLead = function(lead_data, callback){
+	db.leads.save(lead_data, function(error, result){
+		if ( error ){
+			return callback(error);
+		}
+
+		return callback(null, result);
+	});
+}
 
 module.exports.cleanGames = function() {
 	db.games.drop(function(error, replay) {});

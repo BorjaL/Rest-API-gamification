@@ -5,6 +5,7 @@ exports.startServer = function(){
 	var config = require('../config/enviroments').setUp();
 	var player_service = require('../model/player/player_service');
 	var game_service = require('../model/game/game_service');
+	var lead_service = require('../model/lead/lead_service');
 
 	server
 		.use(passport.initialize())
@@ -168,11 +169,21 @@ exports.startServer = function(){
 			game_service.completeAnAction(username, req.params.game_name, req.params.action_info, function(error, action_info){
 				if (error) {
 					console.log("Error during completing an action: " + error);
-					res.send(error);
+					return res.send(error);
 				}
 				res.send(200, action_info);
 			});
 		})(req, res, next);
+	});
+
+	server.post('/leads', function (req, res, next){
+		lead_service.saveNewLead(req.params.new_lead_mail, function (error, lead_info){
+			if (error) {
+				console.log("Error creating new lead", error);
+				return res.send(error);
+			}
+			res.send(200, lead_info);
+		});
 	});
 
 	server.listen(config.server.port, config.server.url,function () {
