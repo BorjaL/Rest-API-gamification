@@ -2,7 +2,7 @@ exports.startServer = function(){
 	var restify = require('restify');
 	var server = restify.createServer({name: 'gami-api'});
 	var passport = require('./authentication/passport');
-	var config = require('../config/enviroments').setUp();
+	var config = require('../config/enviroments').setUp;
 	var player_service = require('../model/player/player_service');
 	var game_service = require('../model/game/game_service');
 	var lead_service = require('../model/lead/lead_service');
@@ -186,7 +186,7 @@ exports.startServer = function(){
 		});
 	});
 
-	server.listen(config.server.port, config.server.url,function () {
+	server.listen(9000, function () {
 		console.log('%s listening at %s', server.name, server.url);
 	});
 };	

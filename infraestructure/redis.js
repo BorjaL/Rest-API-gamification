@@ -1,5 +1,5 @@
 var redis = require('redis');
-var redisClient = redis.createClient();
+var redisClient = redis.createClient(6379, 'redis');
 var suid = require('rand-token').suid;
 
 redisClient.on('error', function (err) {
@@ -24,7 +24,7 @@ function get(access_token, callback){
 function set(player_name){
 	var token = suid(16);
 	redisClient.set(token, player_name);
-	redisClient.expire(token, 600);
+	redisClient.expire(token, 6);
 	return token;
 }
 

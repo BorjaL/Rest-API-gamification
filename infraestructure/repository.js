@@ -1,6 +1,6 @@
 var mongojs = require('mongojs');
 
-var config = require('../config/enviroments').setUp();
+var config = require('../config/enviroments').setUp;
 var db = mongojs(config.mongodb.url+":"+config.mongodb.port+"/"+config.mongodb.name, ['players','games','actions', 'activity', 'leads']);
 
 module.exports.savePlayer = function(player, callback) {

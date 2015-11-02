@@ -2,40 +2,46 @@ var config = {
 	
 	"development": {
 		"server": {
-			"url": "dev.gamification.com",
 			"port": 3023
 		},
-
 		"mongodb":{
-			"url": "localhost",
+			"url": "mongo",
 			"port": 27017,
-			"name": "gamification"
+			"name": "gamisfan"
+		},
+		"redis":{
+			"url": "redis",
+			"port": 6379
 		}
 	},
 
 	"test": {
 		"server": {
-			"url": "dev.gamification.com",
-			"port": 3001
+			"port": 3023
 		},
-
 		"mongodb":{
-			"url": "localhost",
+			"url": "mongo",
 			"port": 27017,
-			"name": "gamification_test"
+			"name": "gamisfan"
+		},
+		"redis":{
+			"url": "redis",
+			"port": 6379
 		}
 	},
 
 	"production": {
 		"server": {
-			"url": "",
-			"port": 3002
+			"port": 3023
 		},
-
 		"mongodb":{
-			"url": "",
+			"url": "mongo",
 			"port": 27017,
-			"name": "gamification"
+			"name": "gamisfan"
+		},
+		"redis":{
+			"url": "redis",
+			"port": 6379
 		}
 	}
 };
@@ -43,4 +49,4 @@ var config = {
 exports.setUp = function(){
 	var node_env = process.env.NODE_ENV || 'development';
 	return config[node_env];
-};
+}();
