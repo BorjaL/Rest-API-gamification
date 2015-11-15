@@ -3,7 +3,7 @@ FROM ubuntu
 RUN apt-get update
 RUN apt-get install -y nodejs-legacy npm
 
-COPY Rest-API-gamification /
+COPY . /
 RUN pwd
 RUN npm install
 
