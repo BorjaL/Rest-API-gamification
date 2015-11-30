@@ -12,7 +12,7 @@ exports.startServer = function(){
 		.use(restify.queryParser())
 		.use(restify.bodyParser())
 		.use(restify.CORS({
-			origins: ['http://gamisfan.com:80']
+			origins: ['http://gamisfan.com']
 		}))
 		.use(restify.fullResponse());
 
