@@ -186,7 +186,7 @@ exports.startServer = function(){
 		});
 	});
 
-	server.listen(9000, function () {
+	server.listen(3023, function () {
 		console.log('%s listening at %s', server.name, server.url);
 	});
 };	
