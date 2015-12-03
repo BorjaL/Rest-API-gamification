@@ -8,14 +8,15 @@
     "test": "make test"
   },
   "dependencies": {
-    "restify": "~2.6.0",
+    "bcrypt-nodejs": "~0.0.3",
+    "keen-js": "^3.3.0",
     "mongojs": "~0.9.10",
     "passport": "0.2.1",
-    "bcrypt-nodejs": "~0.0.3",
-    "rand-token": "~0.2.1",
     "passport-http-bearer": "~1.0.1",
     "passport-local": "~1.0.0",
-    "redis": "~0.12.1"
+    "rand-token": "~0.2.1",
+    "redis": "~0.12.1",
+    "restify": "~2.6.0"
   },
   "devDependencies": {
     "mocha": "~2.0.1",
