@@ -1,5 +1,5 @@
 module.exports = function (string_to_url){
-	string_to_url = String(string_to_url)
+	string_to_url = String(string_to_url);
 	var char_map = {
 		'À': 'A', 'Á': 'A', 'Â': 'A', 'Ã': 'A', 'Ä': 'A', 'Å': 'A', 'Æ': 'AE', 'Ç': 'C', 
 		'È': 'E', 'É': 'E', 'Ê': 'E', 'Ë': 'E', 'Ì': 'I', 'Í': 'I', 'Î': 'I', 'Ï': 'I', 
@@ -11,7 +11,7 @@ module.exports = function (string_to_url){
 		'ð': 'd', 'ñ': 'n', 'ò': 'o', 'ó': 'o', 'ô': 'o', 'õ': 'o', 'ö': 'o', 'ő': 'o', 
 		'ø': 'o', 'ù': 'u', 'ú': 'u', 'û': 'u', 'ü': 'u', 'ű': 'u', 'ý': 'y', 'þ': 'th', 
 		'ÿ': 'y'
-	}
+	};
 
 	for (var k in char_map) {
 		string_to_url = string_to_url.replace(RegExp(k, 'g'), char_map[k]);
@@ -20,4 +20,4 @@ module.exports = function (string_to_url){
 	string_to_url = string_to_url.replace(RegExp('[^a-z0-9]+', 'ig'), "-");
 
 	return string_to_url;
-}
+};

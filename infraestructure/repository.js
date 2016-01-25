@@ -64,8 +64,8 @@ module.exports.findGamesByPlayer = function(username, callback) {
 		}
 
 		return callback(null, result);
-	})
-}
+	});
+};
 
 module.exports.updateGamePlayers = function(game_name, game_players, callback){
 	db.games.update(game_name, {$set: game_players}, function(error, result){
@@ -118,7 +118,7 @@ module.exports.saveNewLead = function(lead_data, callback){
 
 		return callback(null, result);
 	});
-}
+};
 
 module.exports.cleanGames = function() {
 	db.games.drop(function(error, replay) {});

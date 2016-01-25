@@ -30,7 +30,7 @@ module.exports.userPlaysInTheGame = function(username, game, callback){
 	else{
 		callback(null, false);
 	}
-}
+};
 
 module.exports.findAllGamesByPlayer = function(username, callback){
 	game_repository.findGamesByPlayer(username, function (error, list_of_games){
@@ -41,11 +41,11 @@ module.exports.findAllGamesByPlayer = function(username, callback){
 			callback(null, list_of_games);
 		}
 	});
-}
+};
 
 module.exports.completeAnAction = function(username, game_name, action, callback){
 
-	var action_info = {player: username, action: action.name, points: action.points, date: new Date()}
+	var action_info = {player: username, action: action.name, points: action.points, date: new Date()};
 
 	game_repository.completeAnAction({name: game_name}, {activity: action_info},function(error, game_info){
 		if (error){
