@@ -9,7 +9,7 @@ var keenService = {
   sendEmail: function (email){
     var mail_event = {
       mail: email
-    }
+    };
 
     my_keen.addEvent("leads", mail_event, function(err, res){
       if (err) {
@@ -20,6 +20,6 @@ var keenService = {
       }
     });
   }
-}
+};
 
 module.exports = keenService;
