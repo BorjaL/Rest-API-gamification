@@ -1,11 +1,11 @@
-exports.startServer = function(){
+exports.startServer = function(passport){
 	var restify = require('restify');
 	var server = restify.createServer({name: 'gami-api'});
-	var passport = require('./authentication/passport');
 	var config = require('../config/enviroments').setUp;
 	var player_service = require('../model/player/player_service');
 	var game_service = require('../model/game/game_service');
 	var lead_service = require('../model/lead/lead_service');
+	var playerController = require('./controllers/playerController');
 
 	server
 		.use(passport.initialize())
@@ -42,7 +42,7 @@ exports.startServer = function(){
 					res.send(201, game.url);
 				});
 			}
-		})(req, res, next);
+		});
 	});
 
 	server.get('/games/:username/:gamename', function(req, res, next){
@@ -68,7 +68,7 @@ exports.startServer = function(){
 					});
 				});
 			}
-		})(req, res, next);
+		});
 	});
 
 	server.get('/:username/games', function(req, res, next){
@@ -76,6 +76,7 @@ exports.startServer = function(){
 			if (error){
 				console.log("Finding all games of " + req.params.username + ": " + error);
 				res.send(error);
+				next();
 			}
 			else{
 				res.send(200, list_of_games);
@@ -109,19 +110,7 @@ exports.startServer = function(){
 		res.send(204);
 	});
 
-	server.post('/players.json', function (req, res, next) {
-		player_service.saveAPlayer(req.params, function (error, token, username){
-			if (error){
-				if (error instanceof DuplicateUsernameError){
-					console.log("Duplicate username: ", error);
-					return res.send(409, error);
-				}
-				console.log("Error in saveAPlayer: ", error);
-				return res.send(error);
-			}
-			res.send(201, {token: token, username: username});
-		});
-	});
+	server.post('/players.json', playerController.create);
 
 	server.get('/players/:username',function (req, res, next) {
 		player_service.findAPlayer(req.params.username, function (error, player_found){
@@ -145,17 +134,7 @@ exports.startServer = function(){
 		});
 	});
 
-	server.post('/players/login.json', function (req, res, next) {
-		passport.authenticate('local', { session: false },function(error, token, username) {
-			if (error) {
-				return res.send(error);
-			}
-			else if (!token) {
-				return res.send(401);
-			}
-			res.send(200, {token: token, username: username});
-		})(req, res, next);
-	});
+	server.post('/players/login.json', passport.authenticate('local', { session: false }), playerController.login);
 
 	server.post('/actions', function (req, res, next) {
 		passport.authenticate('bearer', { session: false },function(error, token, username) {

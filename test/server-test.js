@@ -1,54 +1,74 @@
 var assert = require('assert');
 var sinon = require('sinon');
-var client = require('restify').createJsonClient({
-    version: '*',
-    url: 'http://dev.gamification.com:3001'
-});
-var game_service = require('../model/game/game_service');
-var player_service = require('../model/player/player_service');
-DuplicateUsernameError = require('../model/error/duplicate_username_error').DuplicateUsernameError;
+var request = require('request');
 
-process.env.NODE_ENV = 'test';
-require('../infraestructure/server').startServer();
+var player_service = require('../model/player/player_service');
+var passport = require('./passport_mock');
+
+
 
 describe('Server', function(){
 
-	it('save a new game', function(done){
+    require('../infraestructure/server').startServer(passport);
 
-		//given:
-        var data = {game: true};
-		var saveAGameStub = sinon.stub(game_service, "saveAGame").callsArgWith(1, null, data);
+    describe('Login', function (){
+        it('testing that the login works with the right params in the request', function(done){
 
-		//when:
-		client.post('/games.json', {},function(err, req, res, data){
-            if (err) {
-                throw new Error(err);
-            }
-            else {
-                if (!data.game) {
-                    throw new Error('invalid response from /games.json');
+            var login_data = {username: "username", password: "password"};
+
+            request.post({url:'http://localhost:3023/players/login.json', formData: login_data}, function(err, res, body){
+                if (err) {
+                    return console.error("login action failed", err);
                 }
+                assert.equal(res.statusCode, 200);
+                assert.equal(JSON.parse(body).token, "token");
+                assert.equal(JSON.parse(body).username, "username");
+                done();
+            });
+        });
+
+        it('testing that the login does not work without the right params in the request', function(done){
+
+            var wrong_login_data = {username: "wrong_username", password: "wrong_password"};
+
+            request.post({url:'http://localhost:3023/players/login.json', formData: wrong_login_data}, function(err, res, body){
+                if (err) {
+                    return console.error("login action failed", err);
+                }
+                assert.equal(res.statusCode, 401);
+                done();
+            });
+        });
+    });
+
+    describe('Create player', function (){
+        it('testing that we can create a player', function(done){
+
+            var savePlayerStub = sinon.stub(player_service, "saveAPlayer").callsArgWith(1, null, "token", "username");
+
+            request.post({url:'http://localhost:3023/players.json'}, function(err, res, body){
 
                 assert.equal(res.statusCode, 201);
-                assert.equal(res.body, JSON.stringify(data));
+                assert.equal(JSON.parse(body).token, "token");
+                assert.equal(JSON.parse(body).username, "username");
+                savePlayerStub.restore();
                 done();
-            }
+            });
         });
-	});
 
-    it('try to save a new player but already exists', function(){
-        //given:
-        var saveAGameStub = sinon.stub(player_service, "saveAPlayer").returns({error: new DuplicateUsernameError('')});
+        it('when the player already exists return 409 status code', function(done){
 
-        //when:
-        client.post('/players.json', {}, function(err, req, res, data){
-            //then:
-            assert.equal(res.statusCode, 409);
-            done();
+            var savePlayerStub = sinon.stub(player_service, "saveAPlayer").callsArgWith(1, {duplicate_user:"This user already exists"});
+
+            request.post({url:'http://localhost:3023/players.json'}, function(err, res, body){
+
+                assert.equal(res.statusCode, 409);
+
+                savePlayerStub.restore();
+                done();
+            });
         });
-    }),
-
-    it('find a new player', function(done){
-        done();
     });
+
+    
 });
