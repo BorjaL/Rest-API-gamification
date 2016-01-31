@@ -1,4 +1,3 @@
-DuplicateUsernameError = require('../error/duplicate_username_error').DuplicateUsernameError;
 var bcrypt = require('bcrypt-nodejs');
 
 function Player(data){
@@ -37,7 +36,7 @@ function Player(data){
 				return callback(error); 
 			}
 			else if (player_found !== null){ 
-				return callback( new DuplicateUsernameError('this username already exists')); 
+				return callback( {duplicate_user: ('%s already exists', this.username)} ); 
 			}
 			else {
 				this.encryptAndSave(this.password, callback);
