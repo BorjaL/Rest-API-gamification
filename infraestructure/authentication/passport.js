@@ -1,7 +1,7 @@
 var passport = require('passport');
-BearerStrategy = require('passport-http-bearer').Strategy;
-LocalStrategy = require('passport-local').Strategy;
-player_service = require('../../model/player/player_service');
+var BearerStrategy = require('passport-http-bearer').Strategy;
+var LocalStrategy = require('passport-local').Strategy;
+var player_service = require('../../model/player/player_service');
 var redis = require('../redis'); 
 
 passport.use(new BearerStrategy(function(token, done) {
