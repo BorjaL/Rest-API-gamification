@@ -5,7 +5,8 @@ exports.startServer = function(passport){
 	var player_service = require('../model/player/player_service');
 	var game_service = require('../model/game/game_service');
 	var lead_service = require('../model/lead/lead_service');
-	var playerController = require('./controllers/playerController');
+	
+	var playerController = require('./controllers/playerController')(passport);
 
 	server
 		.use(passport.initialize())
@@ -111,29 +112,7 @@ exports.startServer = function(passport){
 	});
 
 	server.post('/players.json', playerController.create);
-
-	server.get('/players/:username',function (req, res, next) {
-		player_service.findAPlayer(req.params.username, function (error, player_found){
-			if (error){
-				res.send(error);
-			}
-			if (player_found){
-				passport.authenticate('bearer', { session: false },function(error, token, username) {
-					if (token){
-						res.send(200, {player: player_found, is_owner: username === player_found.username, is_active: token !== false});
-					}
-					else{
-						res.send(401);
-					}
-				
-				})(req, res, next);
-			}
-			else{
-				res.send(404);
-			}
-		});
-	});
-
+	server.get('/players/:username', playerController.get);
 	server.post('/players/login.json', passport.authenticate('local', { session: false }), playerController.login);
 
 	server.post('/actions', function (req, res, next) {

@@ -3,15 +3,15 @@ var sinon = require('sinon');
 var request = require('request');
 
 var player_service = require('../model/player/player_service');
-var passport = require('./passport_mock');
-
+var passport_mock = require('./passport_mock');
 
 
 describe('Server', function(){
 
-    require('../infraestructure/server').startServer(passport);
+    require('../infraestructure/server').startServer(passport_mock);
 
     describe('Login', function (){
+
         it('testing that the login works with the right params in the request', function(done){
 
             var login_data = {username: "username", password: "password"};
@@ -23,6 +23,7 @@ describe('Server', function(){
                 assert.equal(res.statusCode, 200);
                 assert.equal(JSON.parse(body).token, "token");
                 assert.equal(JSON.parse(body).username, "username");
+
                 done();
             });
         });
@@ -65,6 +66,32 @@ describe('Server', function(){
                 assert.equal(res.statusCode, 409);
 
                 savePlayerStub.restore();
+                done();
+            });
+        });
+    });
+
+    describe('Get player', function (){
+        it('testing that a player is returned but is not the owner', function(done){
+
+            var options = {
+                url:'http://localhost:3023/players/BorjaL',
+                headers: {
+                    'authorization': 'Bearer TOKEN'
+                }
+            }
+
+            var findAPlayerStub = sinon.stub(player_service, "findAPlayer").callsArgWith(1, null, {username: "BorjaL"});
+
+            request.get(options, function(err, res, body){
+
+                assert.equal(res.statusCode, 200);
+                assert.equal(JSON.parse(body).player.username, "BorjaL");
+                assert.equal(JSON.parse(body).is_owner, false);
+                assert.equal(JSON.parse(body).is_active, true);
+
+                findAPlayerStub.restore();
+
                 done();
             });
         });
