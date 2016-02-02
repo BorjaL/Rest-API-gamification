@@ -5,7 +5,7 @@ var LocalStrategy = require('passport-local').Strategy;
 
 passport.use(new BearerStrategy(function(token, done) {
 
-  return done(null, token);
+  return done(null, token, token);
 }));
 
 passport.use(new LocalStrategy(function(username, password, done) {

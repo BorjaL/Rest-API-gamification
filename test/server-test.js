@@ -72,12 +72,12 @@ describe('Server', function(){
     });
 
     describe('Get player', function (){
-        it('testing that a player is returned but is not the owner', function(done){
+        it('Tony Stark wants to get the BorjaL player info', function(done){
 
             var options = {
                 url:'http://localhost:3023/players/BorjaL',
                 headers: {
-                    'authorization': 'Bearer TOKEN'
+                    'authorization': 'Bearer TonyStark'
                 }
             }
 
@@ -88,7 +88,29 @@ describe('Server', function(){
                 assert.equal(res.statusCode, 200);
                 assert.equal(JSON.parse(body).player.username, "BorjaL");
                 assert.equal(JSON.parse(body).is_owner, false);
-                assert.equal(JSON.parse(body).is_active, true);
+
+                findAPlayerStub.restore();
+
+                done();
+            });
+        });
+
+        it('BorjaL wants to get his own info', function(done){
+            
+            var options = {
+                url:'http://localhost:3023/players/BorjaL',
+                headers: {
+                    'authorization': 'Bearer TonyStark'
+                }
+            }
+
+            var findAPlayerStub = sinon.stub(player_service, "findAPlayer").callsArgWith(1, null, {username: "TonyStark"});
+
+            request.get(options, function(err, res, body){
+
+                assert.equal(res.statusCode, 200);
+                assert.equal(JSON.parse(body).player.username, "TonyStark");
+                assert.equal(JSON.parse(body).is_owner, true);
 
                 findAPlayerStub.restore();
 

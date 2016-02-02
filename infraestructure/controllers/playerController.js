@@ -41,7 +41,7 @@ var playerController = function (passport_instance){
 							return next();
 						}
 
-						res.send(200, {player: player_found, is_owner: username === player_found.username, is_active: token !== false});
+						res.send(200, {player: player_found, is_owner: username === player_found.username});
 						return next();
 
 					})(req, res);
