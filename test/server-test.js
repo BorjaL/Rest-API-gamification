@@ -3,6 +3,7 @@ var sinon = require('sinon');
 var request = require('request');
 
 var player_service = require('../model/player/player_service');
+var game_service = require('../model/game/game_service');
 var passport_mock = require('./passport_mock');
 
 
@@ -116,6 +117,33 @@ describe('Server', function(){
 
                     findAPlayerStub.restore();
 
+                    done();
+                });
+            });
+        });
+    });
+
+    describe('Game', function(){
+
+        describe('Create', function(){
+
+            it('The game master wants to create a game and get the new game url', function(done){
+
+                var options = {
+                    url:'http://localhost:3023/games.json',
+                    headers: {
+                        'authorization': 'Bearer GameMaster'
+                    }
+                };
+
+                var createAGameStub = sinon.stub(game_service, "saveAGame").callsArgWith(1, null, {url:"game_url"});
+
+                request.post(options, function(err, res, body){
+
+                    assert.equal(res.statusCode, 201);
+                    assert.equal(JSON.parse(body), "game_url");
+
+                    createAGameStub.restore();
                     done();
                 });
             });

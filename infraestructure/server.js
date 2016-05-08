@@ -2,7 +2,6 @@ exports.startServer = function(passport){
 	var restify = require('restify');
 	var server = restify.createServer({name: 'gami-api'});
 	var config = require('../config/enviroments').setUp;
-	var player_service = require('../model/player/player_service');
 	var game_service = require('../model/game/game_service');
 	var lead_service = require('../model/lead/lead_service');
 	
@@ -22,28 +21,23 @@ exports.startServer = function(passport){
 		res.send(204);
 	});
 
-	server.post('/games.json', function (req, res, next) {
-		passport.authenticate('bearer', { session: false },function(error, token, username) {
-			if (error) {
-				console.log("Athenticating user for creating game " + error);
-				res.send(error);
-			}
-			else if (!token) {
-				res.send(401);
-			}
-			else{
-				req.params.owner = username;
-				req.params.players = [username];
-				game_service.saveAGame(req.params, function (error, game){
-					if (error){
-						console.log("Creating a game ", error);
-						return res.send(error);
-					}
-					
-					res.send(201, game.url);
-				});
-			}
-		});
+	server.post('/games.json', passport.authenticate('bearer', { session: false }),function (req, res, next) {
+
+		if (!req.authInfo) {
+			res.send(401);
+		}
+		else{
+			req.params.owner = req.authInfo;
+			req.params.players = [req.authInfo];
+			game_service.saveAGame(req.params, function (error, game){
+				if (error){
+					console.log("Creating a game ", error);
+					return res.send(error);
+				}
+				
+				res.send(201, game.url);
+			});
+		}
 	});
 
 	server.get('/games/:username/:gamename', function(req, res, next){
