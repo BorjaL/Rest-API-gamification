@@ -52,7 +52,7 @@ var playerController = function (passport_instance){
 				}
 			});
 		}
-	}
+	};
 };
 
 module.exports = playerController;

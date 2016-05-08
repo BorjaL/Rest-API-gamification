@@ -10,7 +10,7 @@ passport.use(new BearerStrategy(function(token, done) {
 
 passport.use(new LocalStrategy(function(username, password, done) {
 
-  if (username == "wrong_username" || password == "wrong_password"){
+  if (username === "wrong_username" || password === "wrong_password"){
     return done(null, false);
   }
 

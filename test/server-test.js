@@ -10,7 +10,7 @@ describe('Server', function(){
 
     require('../infraestructure/server').startServer(passport_mock);
 
-    describe('Login', function (){
+    describe('Login', function(){
 
         it('testing that the login works with the right params in the request', function(done){
 
@@ -42,82 +42,83 @@ describe('Server', function(){
         });
     });
 
-    describe('Create player', function (){
-        it('testing that we can create a player', function(done){
+    describe('Player', function(){
 
-            var savePlayerStub = sinon.stub(player_service, "saveAPlayer").callsArgWith(1, null, "token", "username");
+        describe('Create', function(){
+            it('testing that we can create a player', function(done){
 
-            request.post({url:'http://localhost:3023/players.json'}, function(err, res, body){
+                var savePlayerStub = sinon.stub(player_service, "saveAPlayer").callsArgWith(1, null, "token", "username");
 
-                assert.equal(res.statusCode, 201);
-                assert.equal(JSON.parse(body).token, "token");
-                assert.equal(JSON.parse(body).username, "username");
-                savePlayerStub.restore();
-                done();
+                request.post({url:'http://localhost:3023/players.json'}, function(err, res, body){
+
+                    assert.equal(res.statusCode, 201);
+                    assert.equal(JSON.parse(body).token, "token");
+                    assert.equal(JSON.parse(body).username, "username");
+                    savePlayerStub.restore();
+                    done();
+                });
+            });
+
+            it('when the player already exists return 409 status code', function(done){
+
+                var savePlayerStub = sinon.stub(player_service, "saveAPlayer").callsArgWith(1, {duplicate_user:"This user already exists"});
+
+                request.post({url:'http://localhost:3023/players.json'}, function(err, res, body){
+
+                    assert.equal(res.statusCode, 409);
+
+                    savePlayerStub.restore();
+                    done();
+                });
             });
         });
 
-        it('when the player already exists return 409 status code', function(done){
+        describe('Get', function(){
+            it('Tony Stark wants to get the BorjaL player info', function(done){
 
-            var savePlayerStub = sinon.stub(player_service, "saveAPlayer").callsArgWith(1, {duplicate_user:"This user already exists"});
+                var options = {
+                    url:'http://localhost:3023/players/BorjaL',
+                    headers: {
+                        'authorization': 'Bearer TonyStark'
+                    }
+                };
 
-            request.post({url:'http://localhost:3023/players.json'}, function(err, res, body){
+                var findAPlayerStub = sinon.stub(player_service, "findAPlayer").callsArgWith(1, null, {username: "BorjaL"});
 
-                assert.equal(res.statusCode, 409);
+                request.get(options, function(err, res, body){
 
-                savePlayerStub.restore();
-                done();
+                    assert.equal(res.statusCode, 200);
+                    assert.equal(JSON.parse(body).player.username, "BorjaL");
+                    assert.equal(JSON.parse(body).is_owner, false);
+
+                    findAPlayerStub.restore();
+
+                    done();
+                });
+            });
+
+            it('BorjaL wants to get his own info', function(done){
+                
+                var options = {
+                    url:'http://localhost:3023/players/BorjaL',
+                    headers: {
+                        'authorization': 'Bearer TonyStark'
+                    }
+                };
+
+                var findAPlayerStub = sinon.stub(player_service, "findAPlayer").callsArgWith(1, null, {username: "TonyStark"});
+
+                request.get(options, function(err, res, body){
+
+                    assert.equal(res.statusCode, 200);
+                    assert.equal(JSON.parse(body).player.username, "TonyStark");
+                    assert.equal(JSON.parse(body).is_owner, true);
+
+                    findAPlayerStub.restore();
+
+                    done();
+                });
             });
         });
     });
-
-    describe('Get player', function (){
-        it('Tony Stark wants to get the BorjaL player info', function(done){
-
-            var options = {
-                url:'http://localhost:3023/players/BorjaL',
-                headers: {
-                    'authorization': 'Bearer TonyStark'
-                }
-            }
-
-            var findAPlayerStub = sinon.stub(player_service, "findAPlayer").callsArgWith(1, null, {username: "BorjaL"});
-
-            request.get(options, function(err, res, body){
-
-                assert.equal(res.statusCode, 200);
-                assert.equal(JSON.parse(body).player.username, "BorjaL");
-                assert.equal(JSON.parse(body).is_owner, false);
-
-                findAPlayerStub.restore();
-
-                done();
-            });
-        });
-
-        it('BorjaL wants to get his own info', function(done){
-            
-            var options = {
-                url:'http://localhost:3023/players/BorjaL',
-                headers: {
-                    'authorization': 'Bearer TonyStark'
-                }
-            }
-
-            var findAPlayerStub = sinon.stub(player_service, "findAPlayer").callsArgWith(1, null, {username: "TonyStark"});
-
-            request.get(options, function(err, res, body){
-
-                assert.equal(res.statusCode, 200);
-                assert.equal(JSON.parse(body).player.username, "TonyStark");
-                assert.equal(JSON.parse(body).is_owner, true);
-
-                findAPlayerStub.restore();
-
-                done();
-            });
-        });
-    });
-
-    
 });
