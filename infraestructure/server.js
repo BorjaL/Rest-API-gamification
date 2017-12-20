@@ -12,7 +12,7 @@ exports.startServer = function(){
 		.use(restify.queryParser())
 		.use(restify.bodyParser())
 		.use(restify.CORS({
-			origins: ['http://gamisfan.com']
+			origins: ['https://gamisfan.com']
 		}))
 		.use(restify.fullResponse());
 
@@ -38,7 +38,7 @@ exports.startServer = function(){
 						console.log("Creating a game ", error);
 						return res.send(error);
 					}
-					
+
 					res.send(201, game.url);
 				});
 			}
@@ -136,7 +136,7 @@ exports.startServer = function(){
 					else{
 						res.send(401);
 					}
-				
+
 				})(req, res, next);
 			}
 			else{
@@ -189,4 +189,4 @@ exports.startServer = function(){
 	server.listen(3023, function () {
 		console.log('%s listening at %s', server.name, server.url);
 	});
-};	
+};
